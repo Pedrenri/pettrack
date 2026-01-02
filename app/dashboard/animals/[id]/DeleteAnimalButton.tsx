@@ -32,7 +32,7 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
         whileTap={{ scale: 0.98 }}
         type="button"
         onClick={() => setOpen(true)}
-        className="w-95 rounded-full bg-red-600 py-3 text-white font-semibold hover:bg-red-700 transition-colors"
+        className="w-80 md:w-95 rounded-full bg-red-600 py-3 text-white font-semibold hover:bg-red-700 transition-colors"
       >
         Deletar animal
       </motion.button>

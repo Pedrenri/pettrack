@@ -34,11 +34,11 @@ export default function AccountMenu() {
 
   async function handleLogout() {
     await supabase.auth.signOut();
-    router.push("/login");
+    router.push("/");
   }
 
   return (
-    <div className="relative">
+    <div className="relative z-100">
       {/* Botão principal */}
       <motion.button
         whileHover={{ scale: 1.03 }}

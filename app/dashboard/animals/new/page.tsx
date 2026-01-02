@@ -237,7 +237,7 @@ export default function NewAnimalPage() {
         <div>
           <p className="text-sm font-medium text-gray-700 mb-2">Sexo *</p>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col md:flex-row gap-4">
             {[
               { label: "Macho", value: "male" },
               { label: "Fêmea", value: "female" },

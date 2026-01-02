@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import AnimalQRCode from "@/app/dashboard/animals/[id]/AnimalQRCode";
+import { useEffect } from "react";
 
 export default function AnimalPublic({ animal }: { animal: any }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -16,6 +17,18 @@ export default function AnimalPublic({ animal }: { animal: any }) {
     if (value === "female") return "Fêmea";
     return "Indefinido";
   }
+
+  useEffect(() => {
+    if (selectedImage) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [selectedImage]);
 
   return (
     <>

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import AnimalQRCode from "./AnimalQRCode";
 import DeleteAnimalButton from "./DeleteAnimalButton";
 import { motion } from "motion/react";
-
+import Link from "next/link";
 export default function AnimalEditForm({ animal }: { animal: any }) {
   const supabase = createClient();
   const [saving, setSaving] = useState(false);
@@ -231,6 +231,9 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
             <p className="text-sm text-emerald-700 mt-1">
               Escaneie o QR Code para acessar o perfil público
             </p>
+            <Link href={`/animals-public/${animal.id}`} className="mt-2 text-lg font-bold text-emerald-900 underline">
+              Ver página pública →
+            </Link>
           </div>
         </div>
       )}
@@ -310,7 +313,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
       <div>
         <p className="text-sm font-medium text-gray-700 mb-2">Sexo *</p>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           {[
             { label: "Macho", value: "male" },
             { label: "Fêmea", value: "female" },
@@ -412,7 +415,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
           value={form.description}
           rows={3}
           placeholder="Observações gerais, temperamento, histórico..."
-          className="mt-1 w-full rounded-lg border px-4 py-3 placeholder-gray-400 text-gray-600 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
+          className="mt-1 w-full h-50 rounded-lg border px-4 py-3 placeholder-gray-400 text-gray-600 focus:ring-2 focus:ring-emerald-500 outline-none resize-none"
           onChange={handleChange}
         />
       </div>
@@ -422,7 +425,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={saving}
-          className="w-120 rounded-full bg-emerald-600 py-3 text-white font-semibold"
+          className="w-90 md:w-120 rounded-full bg-emerald-600 py-3 text-white font-semibold"
         >
           {saving ? "Salvando…" : "Salvar alterações"}
         </motion.button>
