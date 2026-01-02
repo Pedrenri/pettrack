@@ -1,12 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
+import imageURL from "../public/assets/img/pets-hero.jpg";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-emerald-50 flex flex-col">
       {/* Header */}
       <header className="flex items-center justify-between px-10 py-6">
-        <h1 className="text-2xl font-bold text-emerald-700">🐾 PetTrack</h1>
+        <h1 className="text-2xl font-bold text-emerald-700">
+          <Image
+            src="/assets/img/logo.png"
+            alt="Logo"
+            width={40}
+            height={40}
+            className="inline-block mr-2"
+          />
+          PetTrack
+        </h1>
         <Link
           href="/login"
           className="rounded-full bg-emerald-600 px-6 py-2 text-white font-medium hover:bg-emerald-700 transition"
@@ -44,7 +54,7 @@ export default function Home() {
 
         <div className="mt-16">
           <Image
-            src="/pets-hero.png"
+            src={imageURL}
             alt="Pets felizes"
             width={500}
             height={300}

@@ -95,7 +95,7 @@ export default async function AnimalsList() {
               </p>
             </div>
 
-            <div className="text-sm font-medium text-emerald-600">Ver →</div>
+            <div className="hidden md:block text-sm font-medium text-emerald-600">Ver →</div>
           </Link>
         );
       })}
