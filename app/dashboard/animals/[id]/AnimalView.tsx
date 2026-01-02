@@ -2,9 +2,8 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import AnimalEditForm from "./AnimalEditForm";
-import DeleteAnimalButton from "./DeleteAnimalButton";
-import AnimalQRCode from "./AnimalQRCode";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 export default function AnimalView({ id }: { id?: string }) {
   const supabase = createClient();
@@ -37,27 +36,7 @@ export default function AnimalView({ id }: { id?: string }) {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="
-    inline-flex items-center gap-2
-    rounded-full border border-gray-400
-    px-4 py-2
-    text-sm font-medium text-gray-600
-    bg-white
-    hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700
-    transition
-  "
-        >
-          <span className="text-base leading-none">←</span>
-          <span>Voltar</span>
-        </button>
-
-        <div className="flex gap-4 items-center">
-          {/*           <AnimalQRCode animalId={animal.id} />
-           */}
-        </div>
+        
       </div>
 
       {/* Formulário */}

@@ -130,6 +130,25 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
       onSubmit={handleSubmit}
       className="bg-white rounded-2xl shadow p-6 space-y-4 max-w-3xl mx-auto flex flex-col"
     >
+      <motion.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        type="button"
+        onClick={() => router.back()}
+        className="
+    inline-flex items-center gap-2
+    w-24
+    rounded-full border border-gray-400
+    px-4 py-2
+    text-sm font-medium text-gray-600
+    bg-white
+    hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700
+    transition
+  "
+      >
+        <span className="text-base leading-none">←</span>
+        <span>Voltar</span>
+      </motion.button>
       {/* =========================
           FOTOS (TOPO)
       ========================== */}

@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import AnimalsList from "./AnimalsList";
 import AnimalsSkeleton from "./AnimalsSkeleton";
 
@@ -19,12 +20,12 @@ export default function DashboardPage() {
         <section className="space-y-6">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800">Seus animais</h2>
-            <a
+            <Link
               href="/dashboard/animals/new"
               className="rounded-full bg-emerald-600 px-5 py-2.5 text-white text-sm font-semibold transition hover:bg-emerald-700 hover:shadow-md"
             >
               + Novo animal
-            </a>
+            </Link>
           </div>
 
           <Suspense fallback={<AnimalsSkeleton />}>

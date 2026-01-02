@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import { motion } from "motion/react";
 
 export default function NewAnimalPage() {
   const supabase = createClient();
@@ -41,83 +42,77 @@ export default function NewAnimalPage() {
     handleFiles(e.dataTransfer.files);
   }
 
-  async function uploadPhotos(
-  animalId: string,
-  userId: string
-) {
-  const uploadedUrls: string[] = [];
+  async function uploadPhotos(animalId: string, userId: string) {
+    const uploadedUrls: string[] = [];
 
-  for (const file of photos) {
-    const fileExt = file.name.split(".").pop();
-    const fileName = `${crypto.randomUUID()}.${fileExt}`;
-    const filePath = `${userId}/${animalId}/${fileName}`;
+    for (const file of photos) {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${crypto.randomUUID()}.${fileExt}`;
+      const filePath = `${userId}/${animalId}/${fileName}`;
 
-    const { error } = await supabase.storage
-      .from("animal-photos")
-      .upload(filePath, file);
+      const { error } = await supabase.storage
+        .from("animal-photos")
+        .upload(filePath, file);
 
-    if (error) throw error;
+      if (error) throw error;
 
-    const { data } = supabase.storage
-      .from("animal-photos")
-      .getPublicUrl(filePath);
+      const { data } = supabase.storage
+        .from("animal-photos")
+        .getPublicUrl(filePath);
 
-    uploadedUrls.push(data.publicUrl);
+      uploadedUrls.push(data.publicUrl);
+    }
+
+    return uploadedUrls;
   }
-
-  return uploadedUrls;
-}
-
 
   async function handleSubmit(e: React.FormEvent) {
-  e.preventDefault();
+    e.preventDefault();
 
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+    if (!user) return;
 
-  if (!user) return;
+    // 1. Insere o animal
+    const { data: animal, error } = await supabase
+      .from("animals")
+      .insert({
+        owner_id: user.id,
+        name: form.name,
+        species_name: form.species_name,
+        breed: form.breed || null,
+        species_name_latin: form.species_name_latin || null,
+        gender: form.gender,
+        birthday: form.birthday || null,
+        weight: form.weight || null,
+        chip_id: form.chipId || null,
+        description: form.description || null,
+      })
+      .select()
+      .single();
 
-  // 1. Insere o animal
-  const { data: animal, error } = await supabase
-    .from("animals")
-    .insert({
-      owner_id: user.id,
-      name: form.name,
-      species_name: form.species_name,
-      breed: form.breed || null,
-      species_name_latin: form.species_name_latin || null,
-      gender: form.gender,
-      birthday: form.birthday || null,
-      weight: form.weight || null,
-      chip_id: form.chipId || null,
-      description: form.description || null,
-    })
-    .select()
-    .single();
+    if (error) {
+      console.error(error);
+      return;
+    }
 
-  if (error) {
-    console.error(error);
-    return;
+    // 2. Upload das fotos
+    if (photos.length > 0) {
+      const urls = await uploadPhotos(animal.id, user.id);
+
+      const photosInsert = urls.map((url) => ({
+        animal_id: animal.id,
+        url,
+      }));
+
+      await supabase.from("animal_photos").insert(photosInsert);
+    }
+
+    // 3. Redireciona
+    router.push("/dashboard");
   }
-
-  // 2. Upload das fotos
-  if (photos.length > 0) {
-    const urls = await uploadPhotos(animal.id, user.id);
-
-    const photosInsert = urls.map((url) => ({
-      animal_id: animal.id,
-      url,
-    }));
-
-    await supabase.from("animal_photos").insert(photosInsert);
-  }
-
-  // 3. Redireciona
-  router.push("/dashboard");
-}
-
 
   function formatScientificName(value: string) {
     const parts = value.trim().split(/\s+/).slice(0, 2);
@@ -140,6 +135,25 @@ export default function NewAnimalPage() {
         onSubmit={handleSubmit}
         className="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-8 space-y-6"
       >
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          type="button"
+          onClick={() => router.back()}
+          className="
+    inline-flex items-center gap-2 w-24
+    rounded-full border border-gray-400
+    px-4 py-2
+    text-sm font-medium text-gray-600
+    bg-white
+    hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700
+    transition
+  "
+        >
+          <span className="text-base leading-none">←</span>
+          <span>Voltar</span>
+        </motion.button>
+
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-emerald-700">
@@ -176,7 +190,9 @@ export default function NewAnimalPage() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700">Raça (opcional)</label>
+            <label className="text-sm font-medium text-gray-700">
+              Raça (opcional)
+            </label>
             <input
               name="breed"
               placeholder="Bell Albino"
@@ -202,7 +218,9 @@ export default function NewAnimalPage() {
             onBlur={() =>
               setForm({
                 ...form,
-                species_name_latin: formatScientificName(form.species_name_latin),
+                species_name_latin: formatScientificName(
+                  form.species_name_latin
+                ),
               })
             }
             className="mt-1 w-full rounded-lg border px-4 py-3
@@ -258,7 +276,9 @@ export default function NewAnimalPage() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700">Peso (g) (opcional)</label>
+            <label className="text-sm font-medium text-gray-700">
+              Peso (g) (opcional)
+            </label>
             <input
               name="weight"
               placeholder="Ex: 45g"
@@ -351,12 +371,14 @@ export default function NewAnimalPage() {
         </div>
 
         {/* Submit */}
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           type="submit"
           className="w-full rounded-full bg-emerald-600 py-3 text-white font-semibold transition hover:bg-emerald-700 hover:shadow-md"
         >
           Salvar animal
-        </button>
+        </motion.button>
       </form>
     </div>
   );
