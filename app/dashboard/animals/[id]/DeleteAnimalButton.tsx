@@ -3,9 +3,11 @@
 import { createClient } from "@/utils/supabase/client";
 import { motion, AnimatePresence, scale } from "motion/react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
   const supabase = createClient();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -23,6 +25,8 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
       alert(error.message);
       return;
     }
+
+    router.push("/dashboard")
   }
 
   return (

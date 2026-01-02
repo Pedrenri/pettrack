@@ -64,7 +64,7 @@ export default function VerifyEmailContent() {
           placeholder="Código de 8 dígitos"
           inputMode="numeric"
           maxLength={8}
-          className="mt-6 w-full text-center tracking-widest text-lg rounded-lg border px-4 py-3"
+          className="mt-6 placeholder-gray-400 w-full text-center tracking-widest text-lg rounded-lg border px-4 py-3"
           onChange={e => setCode(e.target.value)}
           required
         />

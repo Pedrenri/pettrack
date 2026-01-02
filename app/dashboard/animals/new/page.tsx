@@ -11,6 +11,7 @@ export default function NewAnimalPage() {
 
   const [photos, setPhotos] = useState<File[]>([]);
   const [dragging, setDragging] = useState(false);
+  const [disabled, setDisabled] = useState(false);
 
   const [form, setForm] = useState({
     name: "",
@@ -68,7 +69,7 @@ export default function NewAnimalPage() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+    setDisabled(true);
     const {
       data: { user },
     } = await supabase.auth.getUser();
@@ -374,6 +375,7 @@ export default function NewAnimalPage() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          disabled={disabled}
           type="submit"
           className="w-full rounded-full bg-emerald-600 py-3 text-white font-semibold transition hover:bg-emerald-700 hover:shadow-md"
         >

@@ -18,6 +18,16 @@ export default function RegisterPage() {
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
     setErrorMsg("");
+    const { data } = await supabase
+      .from("users")
+      .select("*")
+      .eq("email", email) // the email to check if it exists
+      .single();
+
+    if (data) {
+      setErrorMsg("O Email que você digitou já está cadastrado. Tente outro ou faça login.");
+      return;
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
