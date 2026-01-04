@@ -425,7 +425,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
           whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={saving}
-          className="w-90 md:w-120 rounded-full bg-emerald-600 py-3 text-white font-semibold"
+          className="disabled:bg-emerald-300 disabled:text-gray-100 w-90 md:w-120 rounded-full bg-emerald-600 py-3 text-white font-semibold"
         >
           {saving ? "Salvando…" : "Salvar alterações"}
         </motion.button>
