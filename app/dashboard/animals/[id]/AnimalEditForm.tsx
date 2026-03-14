@@ -39,7 +39,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
     birthday: animal.birthday || null,
     chip_id: animal.chip_id || "",
     gender: animal.gender || "",
-    weight: animal.weight || "",
+    weight: animal.weight || null,
     description: animal.description || "",
     last_fed: animal.last_fed || null,
     last_handled: animal.last_handled || null,

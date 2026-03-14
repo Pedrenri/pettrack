@@ -9,7 +9,9 @@ export default function AnimalPublic({ animal }: { animal: any }) {
 
   function formatDate(date?: string) {
     if (!date) return undefined;
-    return new Date(date).toLocaleDateString("pt-BR");
+
+    const [year, month, day] = date.split("-");
+    return `${day}/${month}/${year}`;
   }
 
   function formatGender(value?: string) {

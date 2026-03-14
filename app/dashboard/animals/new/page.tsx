@@ -21,7 +21,7 @@ export default function NewAnimalPage() {
     birthday: null,
     chipId: "",
     gender: "",
-    weight: "",
+    weight: null,
     description: "",
   });
 
