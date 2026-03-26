@@ -38,7 +38,7 @@ export default function DashboardLayout({
             height={32}
             className="mr-2 md:w-10 md:h-10"
           />
-          <span className="hidden md:inline">PetTrack</span>
+          <span className="inline">PetTrack</span>
         </Link>
 
         <LogoutButton />
