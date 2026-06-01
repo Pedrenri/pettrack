@@ -5,7 +5,7 @@ import VerifyEmailContent from "./VerifyEmailContent";
 
 export default function VerifyEmailPage() {
   return (
-    <Suspense fallback={<p>Carregando...</p>}>
+    <Suspense fallback={<p>Loading...</p>}>
       <VerifyEmailContent />
     </Suspense>
   );

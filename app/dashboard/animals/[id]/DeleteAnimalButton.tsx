@@ -38,7 +38,7 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
         onClick={() => setOpen(true)}
         className="w-80 md:w-95 rounded-full bg-red-600 py-3 text-white font-semibold hover:bg-red-700 transition-colors"
       >
-        Deletar animal
+        Delete animal
       </motion.button>
 
       <AnimatePresence>
@@ -56,12 +56,12 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
               exit={{ scale: 0.9, opacity: 0 }}
             >
               <h2 className="text-lg font-semibold text-gray-900">
-                Deletar animal
+                Delete animal
               </h2>
 
               <p className="mt-2 text-sm text-gray-600">
-                Tem certeza que deseja deletar este animal? Essa ação não pode
-                ser desfeita.
+                Are you sure you want to delete this animal? This action cannot
+                be undone.
               </p>
 
               <div className="mt-6 flex justify-end gap-3">
@@ -73,7 +73,7 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
                   className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
                   disabled={loading}
                 >
-                  Cancelar
+                  Cancel
                 </motion.button>
 
                 <motion.button
@@ -84,7 +84,7 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
                   disabled={loading}
                   className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-60"
                 >
-                  {loading ? "Deletando..." : "Confirmar"}
+                  {loading ? "Deleting..." : "Confirm"}
                 </motion.button>
               </div>
             </motion.div>

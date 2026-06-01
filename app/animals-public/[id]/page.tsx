@@ -10,26 +10,22 @@ export default async function AnimalPublicPage({
 }) {
   const { id } = await params;
 
-  console.log("Fetching public animal with ID:", id);
-
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
 
   const { data: animal } = await supabase
     .from("animals")
-    .select(
-      `
-      *,
-      animal_photos (
-        id,
-        url
-      )
-    `
-    )
+    .select("*, animal_photos(id, url)")
     .eq("id", id)
     .single();
 
   if (!animal) notFound();
 
-  return <AnimalPublic animal={animal} />;
+  const { data: weightHistory } = await supabase
+    .from("animal_weight_history")
+    .select("id, measured_at, weight")
+    .eq("animal_id", id)
+    .order("measured_at", { ascending: true });
+
+  return <AnimalPublic animal={animal} weightHistory={weightHistory ?? []} />;
 }

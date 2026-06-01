@@ -1,41 +1,46 @@
-export default function DashboardLoading() {
+"use client";
+
+import { motion } from "motion/react";
+
+const reptiles = ["🦎", "🐍", "🐊", "🐢"];
+
+export default function NewAnimalLoading() {
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex justify-center px-6 py-10">
-      <div className="w-full max-w-4xl space-y-10 animate-pulse">
-        {/* Header */}
-        <header className="space-y-2">
-          <div className="h-8 w-48 rounded bg-emerald-100" />
-          <div className="h-4 w-96 rounded bg-gray-200" />
-        </header>
-
-        <section className="space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="h-6 w-32 rounded bg-gray-200" />
-            <div className="h-10 w-32 rounded-full bg-emerald-200" />
-          </div>
-
-          {/* Lista fake */}
-          <div className="space-y-4">
-            {[1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className="flex items-center gap-5 rounded-2xl border bg-white p-4 shadow-sm"
+    <div className="min-h-screen bg-emerald-50 flex items-center justify-center px-4">
+      <div className="flex flex-col items-center gap-6">
+        <div className="relative w-28 h-28 flex items-center justify-center">
+          {reptiles.map((emoji, i) => (
+            <motion.div
+              key={i}
+              className="absolute inset-0 flex items-start justify-center"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+              initial={{ rotate: i * 90 }}
+            >
+              <motion.span
+                className="text-2xl block"
+                style={{ marginTop: "2px" }}
+                animate={{ rotate: -360 }}
+                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               >
-                {/* Foto */}
-                <div className="h-20 w-20 rounded-xl bg-gray-200" />
+                {emoji}
+              </motion.span>
+            </motion.div>
+          ))}
+          <motion.div
+            animate={{ scale: [1, 1.25, 1], opacity: [0.8, 1, 0.8] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            className="w-10 h-10 rounded-full bg-emerald-500 shadow-lg shadow-emerald-300/60 z-10"
+          />
+        </div>
 
-                {/* Info */}
-                <div className="flex-1 space-y-2">
-                  <div className="h-5 w-40 rounded bg-gray-200" />
-                  <div className="h-4 w-60 rounded bg-gray-100" />
-                </div>
-
-                {/* CTA */}
-                <div className="h-4 w-12 rounded bg-emerald-100" />
-              </div>
-            ))}
-          </div>
-        </section>
+        <motion.p
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+          className="text-sm font-medium text-emerald-700 tracking-wide"
+        >
+          Loading...
+        </motion.p>
       </div>
     </div>
   );

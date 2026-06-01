@@ -41,7 +41,7 @@ export default function AnimalQRCode({ animalId }: { animalId: string }) {
         onClick={downloadSVG}
         className="text-xs text-emerald-700 hover:underline"
       >
-        Baixar QR Code (SVG)
+        Download QR Code (SVG)
       </button>
     </div>
   );

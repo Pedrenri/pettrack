@@ -28,9 +28,9 @@ export default function AnimalView({ id }: { id?: string }) {
     load();
   }, [id]);
 
-  if (!id) return <div>Animal não encontrado</div>;
-  if (loading) return <div>Carregando…</div>;
-  if (!animal) return <div>Animal não encontrado</div>;
+  if (!id) return <div>Animal not found</div>;
+  if (loading) return <div>Loading…</div>;
+  if (!animal) return <div>Animal not found</div>;
 
   return (
     <div className="space-y-6">
@@ -39,7 +39,7 @@ export default function AnimalView({ id }: { id?: string }) {
         
       </div>
 
-      {/* Formulário */}
+      {/* Form */}
       <AnimalEditForm animal={animal} />
     </div>
   );

@@ -23,7 +23,7 @@ export default function AccountMenu() {
 
       if (data.user) {
         setUser({
-          name: data.user.user_metadata?.first_name ?? "Usuário",
+          name: data.user.user_metadata?.first_name ?? "User",
           email: data.user.email ?? null,
         });
       }
@@ -39,14 +39,14 @@ export default function AccountMenu() {
 
   return (
     <div className="relative z-50">
-      {/* BOTÃO */}
+      {/* BUTTON */}
       <motion.button
         whileTap={{ scale: 0.95 }}
         whileHover={{ scale: 1.03 }}
         onClick={() => setOpen(true)}
         className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
       >
-        Conta
+        Account
       </motion.button>
 
       <AnimatePresence>
@@ -98,14 +98,14 @@ export default function AccountMenu() {
                   onClick={handleLogout}
                   className="w-full rounded-xl bg-red-600 py-3 text-sm font-semibold text-white hover:bg-red-700 transition"
                 >
-                  Sair da conta
+                  Sign out
                 </button>
 
                 <button
                   onClick={() => setOpen(false)}
                   className="w-full rounded-xl border py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
                 >
-                  Cancelar
+                  Cancel
                 </button>
               </div>
             </motion.div>
@@ -142,7 +142,7 @@ export default function AccountMenu() {
                   onClick={handleLogout}
                   className="w-full rounded-lg bg-red-600 py-2 text-sm font-semibold text-white hover:bg-red-700 transition"
                 >
-                  Sair
+                  Sign out
                 </button>
               </div>
             </motion.div>
