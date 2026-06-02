@@ -61,7 +61,7 @@ export default function SchedulesDashboard({
   const animalMap = Object.fromEntries(animals.map((a) => [a.id, a]));
 
   const sorted = [...schedules].sort((a, b) => {
-    const order = { overdue: 0, today: 1, soon: 2, ok: 3 };
+    const order: Record<string, number> = { overdue: 0, today: 1, soon: 2, ok: 3 };
     const sa = dueStatus(a), sb = dueStatus(b);
     if (order[sa] !== order[sb]) return order[sa] - order[sb];
     return diffDays(a) - diffDays(b);
