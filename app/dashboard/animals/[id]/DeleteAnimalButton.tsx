@@ -36,7 +36,7 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
         whileTap={{ scale: 0.98 }}
         type="button"
         onClick={() => setOpen(true)}
-        className="w-80 md:w-95 rounded-full bg-red-600 py-3 text-white font-semibold hover:bg-red-700 transition-colors"
+        className="w-full rounded-xl bg-red-600 py-3 text-sm text-white font-semibold hover:bg-red-700 transition-colors"
       >
         Delete animal
       </motion.button>
@@ -50,16 +50,16 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+              className="w-full max-w-md rounded-2xl bg-white dark:bg-gray-800 p-6 shadow-xl"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
             >
-              <h2 className="text-lg font-semibold text-gray-900">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Delete animal
               </h2>
 
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 Are you sure you want to delete this animal? This action cannot
                 be undone.
               </p>
@@ -70,7 +70,7 @@ export default function DeleteAnimalButton({ animalId }: { animalId: string }) {
                   whileTap={{ scale: 0.98 }}
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                   disabled={loading}
                 >
                   Cancel

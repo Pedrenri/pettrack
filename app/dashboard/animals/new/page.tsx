@@ -22,9 +22,9 @@ interface FormState {
 // ─── Shared input styles ─────────────────────────────────────────────────────
 
 const inputCls =
-  "w-full rounded-xl border border-transparent bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-xl border border-transparent bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:border-emerald-300 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900";
 
-const labelCls = "block text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1.5";
+const labelCls = "block text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1.5";
 
 // ─── Step config ─────────────────────────────────────────────────────────────
 
@@ -138,27 +138,27 @@ export default function NewAnimalPage() {
   // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 dark:from-gray-950 to-emerald-50/30 dark:to-gray-900 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-lg">
 
         {/* Header */}
         <div className="mb-8 text-center">
-          <p className="text-2xl font-bold text-gray-900">New Animal</p>
-          <p className="mt-1 text-sm text-gray-500">Step {step + 1} of {STEPS.length}</p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white">New Animal</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">Step {step + 1} of {STEPS.length}</p>
         </div>
 
         {/* Progress bar */}
         <div className="mb-8 flex items-center gap-2">
           {STEPS.map((s, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
-              <div className="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
+              <div className="w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
                 <motion.div
                   className="h-full bg-emerald-500 rounded-full"
                   animate={{ width: i <= step ? "100%" : "0%" }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                 />
               </div>
-              <span className={`text-xs font-medium transition-colors ${i === step ? "text-emerald-600" : i < step ? "text-gray-400" : "text-gray-300"}`}>
+              <span className={`text-xs font-medium transition-colors ${i === step ? "text-emerald-600" : i < step ? "text-gray-400 dark:text-gray-500" : "text-gray-300 dark:text-gray-600"}`}>
                 {s.title}
               </span>
             </div>
@@ -166,12 +166,12 @@ export default function NewAnimalPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
 
           {/* Step label */}
-          <div className="px-8 pt-8 pb-6 border-b border-gray-50">
-            <h2 className="text-lg font-semibold text-gray-900">{STEPS[step].title}</h2>
-            <p className="text-sm text-gray-400 mt-0.5">{STEPS[step].subtitle}</p>
+          <div className="px-8 pt-8 pb-6 border-b border-gray-50 dark:border-gray-700">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{STEPS[step].title}</h2>
+            <p className="text-sm text-gray-400 dark:text-gray-500 mt-0.5">{STEPS[step].subtitle}</p>
           </div>
 
           {/* Animated step content */}
@@ -197,7 +197,7 @@ export default function NewAnimalPage() {
               <button
                 type="button"
                 onClick={() => go(step - 1)}
-                className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition"
+                className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
               >
                 ← Back
               </button>
@@ -205,7 +205,7 @@ export default function NewAnimalPage() {
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="flex items-center gap-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 transition"
+                className="flex items-center gap-1.5 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition"
               >
                 ← Cancel
               </button>
@@ -293,7 +293,7 @@ function StepIdentity({
           onChange={(e) => set("species_name_latin", e.target.value)}
           onBlur={(e) => set("species_name_latin", formatScientificName(e.target.value))}
         />
-        <p className="mt-1 text-xs text-gray-400">Binomial format — auto-formatted on blur</p>
+        <p className="mt-1 text-xs text-gray-400 dark:text-gray-500">Binomial format — auto-formatted on blur</p>
       </div>
 
       <div>
@@ -391,12 +391,12 @@ function StepPhotos({
   return (
     <>
       {photos.length < 3 && (
-        <label className="flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-gray-200 py-10 text-center cursor-pointer transition hover:border-emerald-400 hover:bg-emerald-50/30">
+        <label className="flex flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed border-gray-200 dark:border-gray-600 py-10 text-center cursor-pointer transition hover:border-emerald-400 hover:bg-emerald-50/30">
           <input type="file" accept="image/*" multiple hidden onChange={(e) => handleFiles(e.target.files)} />
           <span className="text-3xl">📷</span>
           <div>
-            <p className="text-sm font-medium text-gray-600">Click or drag to upload</p>
-            <p className="text-xs text-gray-400 mt-0.5">JPG or PNG · up to 3 photos</p>
+            <p className="text-sm font-medium text-gray-600 dark:text-gray-300">Click or drag to upload</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">JPG or PNG · up to 3 photos</p>
           </div>
         </label>
       )}
@@ -427,7 +427,7 @@ function StepPhotos({
       )}
 
       {photos.length === 0 && (
-        <p className="text-center text-xs text-gray-400 -mt-2">Photos are optional — you can add them later.</p>
+        <p className="text-center text-xs text-gray-400 dark:text-gray-500 -mt-2">Photos are optional — you can add them later.</p>
       )}
     </>
   );

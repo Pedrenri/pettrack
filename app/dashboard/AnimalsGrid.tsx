@@ -11,6 +11,7 @@ interface Animal {
   name: string;
   species_name: string;
   breed: string | null;
+  birthday: string | null;
   animal_photos: Array<{ url: string }>;
 }
 

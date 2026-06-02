@@ -24,12 +24,12 @@ export default function AnimalsSkeleton() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.3, delay: i * 0.05 }}
-          className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm"
+          className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm"
         >
-          <Shimmer className="aspect-[4/3] bg-gray-100 rounded-none" />
+          <Shimmer className="aspect-[4/3] bg-gray-100 dark:bg-gray-700 rounded-none" />
           <div className="px-4 py-3 space-y-2">
-            <Shimmer className="h-4 w-24 rounded-lg bg-gray-100" />
-            <Shimmer className="h-3 w-32 rounded-lg bg-gray-50" />
+            <Shimmer className="h-4 w-24 rounded-lg bg-gray-100 dark:bg-gray-700" />
+            <Shimmer className="h-3 w-32 rounded-lg bg-gray-50 dark:bg-gray-600" />
           </div>
         </motion.div>
       ))}

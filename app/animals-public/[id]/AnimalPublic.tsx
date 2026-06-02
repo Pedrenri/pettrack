@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import AnimalQRCode from "@/app/dashboard/animals/[id]/AnimalQRCode";
 import WeightChart from "@/app/components/WeightChart";
+import { calcAge } from "@/utils/age";
 
 interface WeightEntry {
   id: string;
@@ -38,7 +39,7 @@ export default function AnimalPublic({
 
   return (
     <>
-      <div className="min-h-screen bg-gray-50 px-6 py-10 flex justify-center items-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950 px-6 py-10 flex justify-center items-center">
         <div className="w-full max-w-3xl space-y-8">
 
           {/* Photos */}
@@ -54,21 +55,24 @@ export default function AnimalPublic({
 
           {/* Header */}
           <header className="space-y-1">
-            <h1 className="text-3xl font-semibold text-gray-900">{animal.name}</h1>
-            <p className="text-gray-600">
+            <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">{animal.name}</h1>
+            <p className="text-gray-600 dark:text-gray-300">
               {animal.species_name}
               {animal.breed && ` • ${animal.breed}`}
             </p>
             {animal.species_name_latin && (
-              <p className="italic text-sm text-gray-500">{animal.species_name_latin}</p>
+              <p className="italic text-sm text-gray-500 dark:text-gray-400">{animal.species_name_latin}</p>
             )}
           </header>
 
           {/* Data */}
-          <section className="grid sm:grid-cols-2 gap-4 bg-white rounded-2xl p-6 shadow">
+          <section className="grid sm:grid-cols-2 gap-4 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
             <Item label="Gender" value={formatGender(animal.gender)} />
             <Item label="Weight" value={animal.weight && `${animal.weight} g`} />
-            <Item label="Birth date" value={formatDate(animal.birthday)} />
+            <Item
+              label="Birth date"
+              value={animal.birthday ? `${formatDate(animal.birthday)} · ${calcAge(animal.birthday)}` : undefined}
+            />
             <Item label="Microchip" value={animal.chip_id} />
             <Item label="Last fed" value={formatDate(animal.last_fed)} />
             <Item label="Last handled" value={formatDate(animal.last_handled)} />
@@ -78,17 +82,17 @@ export default function AnimalPublic({
 
           {/* Weight history chart */}
           {weightHistory.length > 0 && (
-            <section className="bg-white rounded-2xl p-6 shadow space-y-2">
-              <h2 className="text-sm font-semibold text-gray-700">Weight history</h2>
+            <section className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow space-y-2">
+              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Weight history</h2>
               <WeightChart entries={weightHistory} />
             </section>
           )}
 
           {/* Description */}
           {animal.description && (
-            <section className="bg-white rounded-2xl p-6 shadow">
-              <h2 className="text-sm font-semibold text-gray-700 mb-2">Notes</h2>
-              <p className="text-gray-600 whitespace-pre-line">{animal.description}</p>
+            <section className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
+              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">Notes</h2>
+              <p className="text-gray-600 dark:text-gray-300 whitespace-pre-line">{animal.description}</p>
             </section>
           )}
 
@@ -130,8 +134,8 @@ function Item({ label, value }: { label: string; value?: string }) {
   if (!value) return null;
   return (
     <div>
-      <p className="text-xs text-gray-400">{label}</p>
-      <p className="text-sm font-medium text-gray-700">{value}</p>
+      <p className="text-xs text-gray-400 dark:text-gray-500">{label}</p>
+      <p className="text-sm font-medium text-gray-700 dark:text-gray-200">{value}</p>
     </div>
   );
 }

@@ -84,19 +84,19 @@ export default function WeightChart({ entries }: { entries: Entry[] }) {
 
         {/* Grid */}
         {ticks.map((t, i) => (
-          <line key={i} x1={PAD.left} x2={W - PAD.right} y1={t.y} y2={t.y} stroke="#f3f4f6" strokeWidth={1} />
+          <line key={i} x1={PAD.left} x2={W - PAD.right} y1={t.y} y2={t.y} stroke="var(--chart-grid)" strokeWidth={1} />
         ))}
 
         {/* Y labels */}
         {ticks.map((t, i) => (
-          <text key={i} x={PAD.left - 6} y={t.y + 4} textAnchor="end" fontSize={9} fill="#d1d5db" fontFamily="system-ui">
+          <text key={i} x={PAD.left - 6} y={t.y + 4} textAnchor="end" fontSize={9} fill="var(--chart-label)" fontFamily="system-ui">
             {t.v}g
           </text>
         ))}
 
         {/* X labels */}
         {xLabels.map((l) => (
-          <text key={l.x} x={l.x} y={H - 6} textAnchor="middle" fontSize={9} fill="#d1d5db" fontFamily="system-ui">
+          <text key={l.x} x={l.x} y={H - 6} textAnchor="middle" fontSize={9} fill="var(--chart-label)" fontFamily="system-ui">
             {l.label}
           </text>
         ))}

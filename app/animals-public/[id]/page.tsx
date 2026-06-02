@@ -1,7 +1,14 @@
 import { createClient } from "@/utils/supabase/server";
+import { createClient as createAnonClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import AnimalPublic from "./AnimalPublic";
 import { notFound } from "next/navigation";
+
+// Cookie-free client — runs as the anon role, respects public RLS policies
+const anonSupabase = createAnonClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!
+);
 
 export default async function AnimalPublicPage({
   params,
@@ -21,7 +28,7 @@ export default async function AnimalPublicPage({
 
   if (!animal) notFound();
 
-  const { data: weightHistory } = await supabase
+  const { data: weightHistory } = await anonSupabase
     .from("animal_weight_history")
     .select("id, measured_at, weight")
     .eq("animal_id", id)

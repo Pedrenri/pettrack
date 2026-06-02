@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import { useTheme } from "@/app/components/ThemeProvider";
 
 type UserInfo = {
   name: string | null;
@@ -16,6 +17,7 @@ export default function AccountMenu() {
 
   const [open, setOpen] = useState(false);
   const [user, setUser] = useState<UserInfo | null>(null);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     async function loadUser() {
@@ -46,7 +48,7 @@ export default function AccountMenu() {
         onClick={() => setOpen(true)}
         className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
       >
-        Account
+        Options
       </motion.button>
 
       <AnimatePresence>
@@ -69,7 +71,7 @@ export default function AccountMenu() {
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
               className="
                 fixed bottom-0 left-0 right-0
-                bg-white
+                bg-white dark:bg-gray-800
                 rounded-t-2xl
                 shadow-2xl
                 p-6
@@ -79,21 +81,30 @@ export default function AccountMenu() {
               "
             >
               {/* handle */}
-              <div className="mx-auto h-1.5 w-12 rounded-full bg-gray-300" />
+              <div className="mx-auto h-1.5 w-12 rounded-full bg-gray-300 dark:bg-gray-600" />
 
               {/* user */}
               <div className="text-center">
-                <p className="text-lg font-semibold text-gray-900">
+                <p className="text-lg font-semibold text-gray-900 dark:text-white">
                   {user?.name}
                 </p>
 
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {user?.email}
                 </p>
               </div>
 
               {/* actions */}
               <div className="space-y-3 pt-2">
+                {/* Dark mode toggle row */}
+                <button
+                  onClick={toggle}
+                  className="w-full flex items-center justify-between rounded-xl border dark:border-gray-600 px-4 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+                >
+                  <span>{theme === "dark" ? "Light mode" : "Dark mode"}</span>
+                  <span>{theme === "dark" ? "☀️" : "🌙"}</span>
+                </button>
+
                 <button
                   onClick={handleLogout}
                   className="w-full rounded-xl bg-red-600 py-3 text-sm font-semibold text-white hover:bg-red-700 transition"
@@ -103,7 +114,7 @@ export default function AccountMenu() {
 
                 <button
                   onClick={() => setOpen(false)}
-                  className="w-full rounded-xl border py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                  className="w-full rounded-xl border dark:border-gray-600 py-3 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Cancel
                 </button>
@@ -120,24 +131,24 @@ export default function AccountMenu() {
                 absolute right-0 top-12
                 w-64
                 rounded-xl
-                border border-gray-200
-                bg-white
+                border border-gray-200 dark:border-gray-700
+                bg-white dark:bg-gray-800
                 shadow-lg
 
                 hidden md:block
               "
             >
               <div className="px-4 py-3">
-                <p className="text-sm font-semibold text-gray-900">
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
                   {user?.name}
                 </p>
 
-                <p className="text-xs text-gray-500 truncate">
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
                   {user?.email}
                 </p>
               </div>
 
-              <div className="border-t border-gray-100 px-4 py-3">
+              <div className="border-t border-gray-100 dark:border-gray-700 px-4 py-3">
                 <button
                   onClick={handleLogout}
                   className="w-full rounded-lg bg-red-600 py-2 text-sm font-semibold text-white hover:bg-red-700 transition"

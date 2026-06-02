@@ -8,7 +8,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 const inputCls =
-  "w-full rounded-xl border border-transparent bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-xl border border-transparent bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:border-emerald-300 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900";
 
 export default function LoginPage() {
   const supabase = createClient();
@@ -49,13 +49,13 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="bg-white rounded-3xl shadow-2xl shadow-black/30 px-8 py-9">
-          <h1 className="text-xl font-bold text-gray-900">Welcome back</h1>
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl shadow-black/30 px-8 py-9">
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Welcome back</h1>
           <p className="mt-1 text-sm text-gray-400">Sign in to your account</p>
 
           <form onSubmit={handleLogin} className="mt-6 space-y-4">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1.5">Email</label>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1.5">Email</label>
               <input
                 type="email"
                 placeholder="you@example.com"
@@ -68,7 +68,7 @@ export default function LoginPage() {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1.5">Password</label>
+              <label className="block text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1.5">Password</label>
               <input
                 type="password"
                 placeholder="••••••••"

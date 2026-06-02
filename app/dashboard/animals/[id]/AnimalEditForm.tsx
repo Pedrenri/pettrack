@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
+import { calcAge } from "@/utils/age";
 import AnimalQRCode from "./AnimalQRCode";
 import DeleteAnimalButton from "./DeleteAnimalButton";
 import WeightLog from "./WeightLog";
@@ -10,9 +11,9 @@ import { motion } from "motion/react";
 import Link from "next/link";
 
 const inputCls =
-  "w-full rounded-xl border border-transparent bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100";
+  "w-full rounded-xl border border-transparent bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:border-emerald-300 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900";
 
-const labelCls = "block text-xs font-semibold uppercase tracking-wide text-gray-400 mb-1.5";
+const labelCls = "block text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1.5";
 
 export default function AnimalEditForm({ animal }: { animal: any }) {
   const supabase = createClient();
@@ -20,8 +21,9 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
   const [saving, setSaving] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [existingPhotos, setExistingPhotos] = useState(animal.animal_photos || []);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const [form, setForm] = useState({
+  const initialForm = {
     name: animal.name || "",
     species_name: animal.species_name || "",
     breed: animal.breed || "",
@@ -34,7 +36,32 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
     last_handled: animal.last_handled || "",
     last_shed: animal.last_shed || "",
     last_weighed: animal.last_weighed || "",
+  };
+
+  const [form, setForm] = useState(initialForm);
+
+  const isDirty = useRef(false);
+  useEffect(() => {
+    isDirty.current =
+      JSON.stringify(form) !== JSON.stringify(initialForm) || photos.length > 0;
   });
+
+  // Warn on browser close / tab unload
+  useEffect(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      if (isDirty.current) e.preventDefault();
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, []);
+
+  function tryGoBack() {
+    if (isDirty.current) {
+      setShowConfirm(true);
+    } else {
+      router.back();
+    }
+  }
 
   function set(key: string, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -79,9 +106,15 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
     setSaving(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    await supabase.from("animals").update(form).eq("id", animal.id);
+    const dateFields = ["birthday", "last_fed", "last_handled", "last_shed", "last_weighed"] as const;
+    const payload = { ...form };
+    for (const f of dateFields) {
+      if (!payload[f]) (payload as any)[f] = null;
+    }
+    await supabase.from("animals").update(payload).eq("id", animal.id);
     if (photos.length > 0) await uploadNewPhotos(animal.id, user.id);
     setPhotos([]);
+    isDirty.current = false;
     setSaving(false);
     router.push("/dashboard");
   }
@@ -92,8 +125,8 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
       {/* Back */}
       <button
         type="button"
-        onClick={() => router.back()}
-        className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition"
+        onClick={tryGoBack}
+        className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition"
       >
         ← Back
       </button>
@@ -101,7 +134,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
       <form onSubmit={handleSubmit} className="space-y-6">
 
         {/* ── Photos ─────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-4">
           <p className={labelCls}>Photos</p>
           <div className="grid grid-cols-3 gap-3">
             {existingPhotos.map((p: any) => (
@@ -125,7 +158,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
               </div>
             ))}
             {existingPhotos.length + photos.length < 3 && (
-              <label className="flex items-center justify-center aspect-square rounded-xl border-2 border-dashed border-gray-200 cursor-pointer hover:border-emerald-300 hover:bg-emerald-50/30 transition text-gray-400 text-xl">
+              <label className="flex items-center justify-center aspect-square rounded-xl border-2 border-dashed border-gray-200 dark:border-gray-600 cursor-pointer hover:border-emerald-300 hover:bg-emerald-50/30 transition text-gray-400 text-xl">
                 <input type="file" multiple accept="image/*" hidden onChange={(e) => handleFiles(e.target.files)} />
                 📷
               </label>
@@ -134,7 +167,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
         </section>
 
         {/* ── Identity ────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-5">
           <p className={labelCls}>Identity</p>
 
           <div>
@@ -174,7 +207,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
                   className={`flex-1 flex items-center justify-center rounded-xl py-2.5 text-sm font-medium cursor-pointer transition border
                     ${form.gender === o.value
                       ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                      : "border-gray-100 bg-gray-50 text-gray-500 hover:border-gray-200"}`}
+                      : "border-gray-100 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-200"}`}
                 >
                   <input type="radio" name="gender" value={o.value} className="sr-only" onChange={handleChange} checked={form.gender === o.value} />
                   {o.label}
@@ -185,12 +218,15 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
         </section>
 
         {/* ── Details ─────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-5">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-5">
           <p className={labelCls}>Details</p>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className={labelCls}>Birth date</label>
+              <div className="flex items-baseline justify-between mb-1.5">
+                <label className={labelCls} style={{ marginBottom: 0 }}>Birth date</label>
+                {form.birthday && <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{calcAge(form.birthday)}</span>}
+              </div>
               <input type="date" name="birthday" className={inputCls} value={form.birthday ?? ""} onChange={handleChange} />
             </div>
             <div>
@@ -201,7 +237,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
         </section>
 
         {/* ── Care dates ─────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-4">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-4">
           <p className={labelCls}>Care log</p>
           <div className="grid sm:grid-cols-2 gap-4">
             {([
@@ -219,17 +255,17 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
         </section>
 
         {/* ── Weight history ──────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6">
           <WeightLog animalId={animal.id} />
         </section>
 
         {/* ── Notes ──────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 space-y-3">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-3">
           <p className={labelCls}>Notes</p>
           <textarea
             name="description"
             value={form.description}
-            rows={4}
+            rows={10}
             placeholder="Temperament, history, special care notes…"
             className={inputCls}
             style={{ resize: "none" }}
@@ -238,11 +274,11 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
         </section>
 
         {/* ── QR ─────────────────────────────────────────── */}
-        <section className="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-5">
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 flex flex-col sm:flex-row items-center gap-5">
           <AnimalQRCode animalId={animal.id} />
           <div className="space-y-1">
-            <p className="text-sm font-semibold text-gray-800">Animal Identification</p>
-            <p className="text-xs text-gray-400">Scan to open the public profile. Print or attach to enclosure.</p>
+            <p className="text-sm font-semibold text-gray-800 dark:text-gray-100">Animal Identification</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">Scan to open the public profile. Print or attach to enclosure.</p>
             <Link href={`/animals-public/${animal.id}`} className="text-xs text-emerald-600 hover:underline">
               View public page →
             </Link>
@@ -256,7 +292,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
             whileTap={{ scale: 0.99 }}
             type="submit"
             disabled={saving}
-            className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition disabled:opacity-50"
+            className="w-full rounded-xl bg-emerald-600 py-3 text-md font-semibold text-white shadow-sm hover:bg-emerald-700 transition disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save changes"}
           </motion.button>
@@ -264,6 +300,36 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
         </div>
 
       </form>
+
+      {/* Unsaved changes confirm modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-full max-w-sm rounded-2xl bg-white dark:bg-gray-800 p-6 shadow-xl mx-4"
+          >
+            <h2 className="text-base font-semibold text-gray-900 dark:text-white">Unsaved changes</h2>
+            <p className="mt-1.5 text-sm text-gray-500 dark:text-gray-400">
+              You have unsaved changes. Leave without saving?
+            </p>
+            <div className="mt-5 flex gap-3">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 rounded-xl border dark:border-gray-600 py-2.5 text-sm font-semibold text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 transition"
+              >
+                Keep editing
+              </button>
+              <button
+                onClick={() => { isDirty.current = false; router.back(); }}
+                className="flex-1 rounded-xl bg-red-600 py-2.5 text-sm font-semibold text-white hover:bg-red-700 transition"
+              >
+                Discard
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 }
