@@ -11,7 +11,7 @@ type UserInfo = {
   email: string | null;
 };
 
-export default function AccountMenu() {
+export default function AccountMenu({ tabMode = false }: { tabMode?: boolean }) {
   const supabase = createClient();
   const router = useRouter();
 
@@ -42,14 +42,24 @@ export default function AccountMenu() {
   return (
     <div className="relative z-50">
       {/* BUTTON */}
-      <motion.button
-        whileTap={{ scale: 0.95 }}
-        whileHover={{ scale: 1.03 }}
-        onClick={() => setOpen(true)}
-        className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
-      >
-        Options
-      </motion.button>
+      {tabMode ? (
+        <button
+          onClick={() => setOpen(true)}
+          className="flex flex-col items-center gap-1 text-gray-400 dark:text-gray-500 text-xs font-semibold w-full py-2.5"
+        >
+          <span className="text-xl leading-none">👤</span>
+          Account
+        </button>
+      ) : (
+        <motion.button
+          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.03 }}
+          onClick={() => setOpen(true)}
+          className="rounded-full bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700"
+        >
+          Options
+        </motion.button>
+      )}
 
       <AnimatePresence>
         {open && (

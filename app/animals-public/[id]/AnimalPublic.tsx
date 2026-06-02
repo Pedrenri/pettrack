@@ -4,21 +4,25 @@ import { useState, useEffect } from "react";
 import AnimalQRCode from "@/app/dashboard/animals/[id]/AnimalQRCode";
 import WeightChart from "@/app/components/WeightChart";
 import { calcAge } from "@/utils/age";
+import { TYPE_CONFIG, type LogType } from "@/app/dashboard/animals/[id]/UnifiedLog";
+import LogEntryCard from "@/app/components/LogEntryCard";
 
-interface WeightEntry {
-  id: string;
-  measured_at: string;
-  weight: number;
-}
+interface WeightEntry { id: string; measured_at: string; weight: number; }
+interface LogEntry { id: string; logged_at: string; type: LogType; title: string | null; value: number | null; unit: string | null; notes: string | null; }
+
+const ALL_TYPES = Object.keys(TYPE_CONFIG) as LogType[];
 
 export default function AnimalPublic({
   animal,
   weightHistory,
+  logEntries,
 }: {
   animal: any;
   weightHistory: WeightEntry[];
+  logEntries: LogEntry[];
 }) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<LogType | "all">("all");
 
   function formatDate(date?: string) {
     if (!date) return undefined;
@@ -36,6 +40,9 @@ export default function AnimalPublic({
     document.body.style.overflow = selectedImage ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [selectedImage]);
+
+  const presentTypes = ALL_TYPES.filter(t => logEntries.some(e => e.type === t));
+  const filtered = activeFilter === "all" ? logEntries : logEntries.filter(e => e.type === activeFilter);
 
   return (
     <>
@@ -57,8 +64,7 @@ export default function AnimalPublic({
           <header className="space-y-1">
             <h1 className="text-3xl font-semibold text-gray-900 dark:text-white">{animal.name}</h1>
             <p className="text-gray-600 dark:text-gray-300">
-              {animal.species_name}
-              {animal.breed && ` • ${animal.breed}`}
+              {animal.species_name}{animal.breed && ` • ${animal.breed}`}
             </p>
             {animal.species_name_latin && (
               <p className="italic text-sm text-gray-500 dark:text-gray-400">{animal.species_name_latin}</p>
@@ -69,10 +75,7 @@ export default function AnimalPublic({
           <section className="grid sm:grid-cols-2 gap-4 bg-white dark:bg-gray-800 rounded-2xl p-6 shadow">
             <Item label="Gender" value={formatGender(animal.gender)} />
             <Item label="Weight" value={animal.weight && `${animal.weight} g`} />
-            <Item
-              label="Birth date"
-              value={animal.birthday ? `${formatDate(animal.birthday)} · ${calcAge(animal.birthday)}` : undefined}
-            />
+            <Item label="Birth date" value={animal.birthday ? `${formatDate(animal.birthday)} · ${calcAge(animal.birthday)}` : undefined} />
             <Item label="Microchip" value={animal.chip_id} />
             <Item label="Last fed" value={formatDate(animal.last_fed)} />
             <Item label="Last handled" value={formatDate(animal.last_handled)} />
@@ -80,11 +83,47 @@ export default function AnimalPublic({
             <Item label="Last weighed" value={formatDate(animal.last_weighed)} />
           </section>
 
-          {/* Weight history chart */}
+          {/* Weight chart */}
           {weightHistory.length > 0 && (
             <section className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow space-y-2">
               <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Weight history</h2>
               <WeightChart entries={weightHistory} />
+            </section>
+          )}
+
+          {/* Log */}
+          {logEntries.length > 0 && (
+            <section className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow space-y-4">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">Log</h2>
+                {presentTypes.length > 1 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      onClick={() => setActiveFilter("all")}
+                      className={`rounded-full px-2.5 py-1 text-xs font-medium border transition
+                        ${activeFilter === "all"
+                          ? "bg-gray-900 dark:bg-white border-gray-900 dark:border-white text-white dark:text-gray-900"
+                          : "border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400"}`}>
+                      All
+                    </button>
+                    {presentTypes.map(t => (
+                      <button key={t} onClick={() => setActiveFilter(t)}
+                        className={`rounded-full px-2.5 py-1 text-xs font-medium border transition
+                          ${activeFilter === t
+                            ? "bg-gray-900 dark:bg-white border-gray-900 dark:border-white text-white dark:text-gray-900"
+                            : "border-gray-200 dark:border-gray-600 text-gray-500 dark:text-gray-400"}`}>
+                        {TYPE_CONFIG[t].icon} {TYPE_CONFIG[t].label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                {filtered.map(e => (
+                  <LogEntryCard key={e.id} entry={e} />
+                ))}
+              </div>
             </section>
           )}
 
@@ -101,9 +140,7 @@ export default function AnimalPublic({
             <AnimalQRCode animalId={animal.id} />
             <div>
               <p className="font-semibold text-emerald-800">Animal Identification</p>
-              <p className="text-sm text-emerald-700">
-                This QR Code links to this public page. It can be printed or used for physical identification.
-              </p>
+              <p className="text-sm text-emerald-700">This QR Code links to this public page. It can be printed or used for physical identification.</p>
             </div>
           </section>
         </div>
@@ -111,17 +148,9 @@ export default function AnimalPublic({
 
       {/* Image modal */}
       {selectedImage && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-10 right-0 text-white text-xl font-bold"
-            >
-              ✕
-            </button>
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center px-4" onClick={() => setSelectedImage(null)}>
+          <div className="relative max-w-4xl w-full" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setSelectedImage(null)} className="absolute -top-10 right-0 text-white text-xl font-bold">✕</button>
             <img src={selectedImage} className="w-full max-h-[85vh] object-contain rounded-xl bg-black" />
           </div>
         </div>

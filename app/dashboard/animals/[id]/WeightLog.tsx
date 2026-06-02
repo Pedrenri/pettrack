@@ -83,7 +83,7 @@ export default function WeightLog({ animalId }: { animalId: string }) {
       {/* Add row */}
       <div className="flex items-end gap-2">
         <div className="flex-shrink-0">
-          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Weight (g)</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Weight (g) <span className="text-red-400">*</span></p>
           <input
             type="number" min="0" step="0.1"
             value={weight}
@@ -93,7 +93,7 @@ export default function WeightLog({ animalId }: { animalId: string }) {
           />
         </div>
         <div className="flex-1">
-          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Date</p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Date <span className="text-red-400">*</span></p>
           <input
             type="date"
             value={date}

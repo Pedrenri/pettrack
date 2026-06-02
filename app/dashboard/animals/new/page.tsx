@@ -253,7 +253,7 @@ function StepIdentity({
   return (
     <>
       <div>
-        <label className={labelCls}>Name *</label>
+        <label className={labelCls}>Name <span className="text-red-400">*</span></label>
         <input
           className={inputCls}
           placeholder="e.g. Luna"
@@ -265,7 +265,7 @@ function StepIdentity({
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className={labelCls}>Species *</label>
+          <label className={labelCls}>Species <span className="text-red-400">*</span></label>
           <input
             className={inputCls}
             placeholder="e.g. Leopard Gecko"

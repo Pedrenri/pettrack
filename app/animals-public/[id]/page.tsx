@@ -28,11 +28,24 @@ export default async function AnimalPublicPage({
 
   if (!animal) notFound();
 
-  const { data: weightHistory } = await anonSupabase
-    .from("animal_weight_history")
-    .select("id, measured_at, weight")
+  const { data: weightLog } = await anonSupabase
+    .from("animal_log")
+    .select("id, logged_at, value")
     .eq("animal_id", id)
-    .order("measured_at", { ascending: true });
+    .eq("type", "weight")
+    .order("logged_at", { ascending: true });
 
-  return <AnimalPublic animal={animal} weightHistory={weightHistory ?? []} />;
+  const weightHistory = (weightLog ?? [])
+    .filter((e: any) => e.value != null)
+    .map((e: any) => ({ id: e.id, measured_at: e.logged_at, weight: e.value }));
+
+  const { data: logEntries } = await anonSupabase
+    .from("animal_log")
+    .select("id, logged_at, type, title, value, unit, notes")
+    .eq("animal_id", id)
+    .order("logged_at", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(60);
+
+  return <AnimalPublic animal={animal} weightHistory={weightHistory} logEntries={logEntries ?? []} />;
 }

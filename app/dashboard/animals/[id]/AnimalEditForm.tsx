@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import { calcAge } from "@/utils/age";
 import AnimalQRCode from "./AnimalQRCode";
 import DeleteAnimalButton from "./DeleteAnimalButton";
-import WeightLog from "./WeightLog";
+import UnifiedLog from "./UnifiedLog";
+import WeightChartSection from "./WeightChartSection";
+import ScheduleManager from "./ScheduleManager";
 import { motion } from "motion/react";
 import Link from "next/link";
 
@@ -21,6 +23,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
   const [saving, setSaving] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [existingPhotos, setExistingPhotos] = useState(animal.animal_photos || []);
+  const [weightKey, setWeightKey] = useState(0);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const initialForm = {
@@ -32,10 +35,6 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
     chip_id: animal.chip_id || "",
     gender: animal.gender || "",
     description: animal.description || "",
-    last_fed: animal.last_fed || "",
-    last_handled: animal.last_handled || "",
-    last_shed: animal.last_shed || "",
-    last_weighed: animal.last_weighed || "",
   };
 
   const [form, setForm] = useState(initialForm);
@@ -106,11 +105,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
     setSaving(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    const dateFields = ["birthday", "last_fed", "last_handled", "last_shed", "last_weighed"] as const;
-    const payload = { ...form };
-    for (const f of dateFields) {
-      if (!payload[f]) (payload as any)[f] = null;
-    }
+    const payload = { ...form, birthday: form.birthday || null };
     await supabase.from("animals").update(payload).eq("id", animal.id);
     if (photos.length > 0) await uploadNewPhotos(animal.id, user.id);
     setPhotos([]);
@@ -171,13 +166,13 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
           <p className={labelCls}>Identity</p>
 
           <div>
-            <label className={labelCls}>Name</label>
+            <label className={labelCls}>Name <span className="text-red-400">*</span></label>
             <input name="name" required placeholder="e.g. Luna" className={inputCls} value={form.name} onChange={handleChange} />
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
-              <label className={labelCls}>Species</label>
+              <label className={labelCls}>Species <span className="text-red-400">*</span></label>
               <input name="species_name" required placeholder="e.g. Leopard Gecko" className={inputCls} value={form.species_name} onChange={handleChange} />
             </div>
             <div>
@@ -236,27 +231,18 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
           </div>
         </section>
 
-        {/* ── Care dates ─────────────────────────────────── */}
-        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6 space-y-4">
-          <p className={labelCls}>Care log</p>
-          <div className="grid sm:grid-cols-2 gap-4">
-            {([
-              ["last_fed", "Last fed"],
-              ["last_handled", "Last handled"],
-              ["last_shed", "Last shed"],
-              ["last_weighed", "Last weighed"],
-            ] as const).map(([name, label]) => (
-              <div key={name}>
-                <label className={labelCls}>{label}</label>
-                <input type="date" name={name} className={inputCls} value={(form as any)[name] ?? ""} onChange={handleChange} />
-              </div>
-            ))}
-          </div>
+
+        {/* ── Weight chart ─────────────────────────────────── */}
+        <WeightChartSection animalId={animal.id} refreshKey={weightKey} />
+
+        {/* ── Log ─────────────────────────────────────────── */}
+        <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6">
+          <UnifiedLog animalId={animal.id} onWeightChange={() => setWeightKey(k => k + 1)} />
         </section>
 
-        {/* ── Weight history ──────────────────────────────── */}
+        {/* ── Schedules ───────────────────────────────────── */}
         <section className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-6">
-          <WeightLog animalId={animal.id} />
+          <ScheduleManager animalId={animal.id} />
         </section>
 
         {/* ── Notes ──────────────────────────────────────── */}
@@ -265,7 +251,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
           <textarea
             name="description"
             value={form.description}
-            rows={10}
+            rows={4}
             placeholder="Temperament, history, special care notes…"
             className={inputCls}
             style={{ resize: "none" }}
@@ -292,7 +278,7 @@ export default function AnimalEditForm({ animal }: { animal: any }) {
             whileTap={{ scale: 0.99 }}
             type="submit"
             disabled={saving}
-            className="w-full rounded-xl bg-emerald-600 py-3 text-md font-semibold text-white shadow-sm hover:bg-emerald-700 transition disabled:opacity-50"
+            className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition disabled:opacity-50"
           >
             {saving ? "Saving…" : "Save changes"}
           </motion.button>
