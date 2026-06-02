@@ -1,0 +1,277 @@
+[00:00:00.840] Server  LOG     ✓ Ready in 623ms
+[00:00:06.969] Server  ERROR   ⨯ ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+
+[00:00:07.749] Browser ERROR   uncaughtError: Error: ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+
+[00:00:07.947] Browser ERROR   ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+[00:00:07.959] Server  ERROR   ⨯ ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+
+[00:00:08.155] Browser ERROR   ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+[00:00:08.156] Browser ERROR   ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+[00:00:10.948] Server  ERROR   ⨯ ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+
+[00:00:11.107] Browser ERROR   uncaughtError: Error: ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+
+[00:00:11.213] Server  ERROR   ⨯ ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+
+[00:00:11.246] Browser ERROR   ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+[00:00:11.246] Browser ERROR   ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+[00:00:11.354] Browser ERROR   ./packages/core/src/index.ts:2:69
+Parsing ecmascript source code failed
+  1 | // Types
+> 2 | export type { Animal, AnimalPhoto, ScheduleItem, ScheduleType, LogEn
+    |                                                                     ^
+
+Expected ',', got '<eof>'
+
+Import traces:
+  Client Component Browser:
+    ./packages/core/src/index.ts [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component Browser]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/core/src/index.ts [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalEditForm.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Client Component SSR]
+    ./apps/web/app/dashboard/animals/[id]/AnimalView.tsx [Server Component]
+    ./apps/web/app/dashboard/animals/[id]/page.tsx [Server Component]
