@@ -38,6 +38,9 @@ export default function AnimalsScreen() {
     <SafeAreaView style={s.root}>
       <View style={s.header}>
         <Text style={s.heading}>My Animals</Text>
+        <TouchableOpacity style={s.addBtn} onPress={() => router.push("/animal/new")}>
+          <Text style={s.addBtnText}>+ Add</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={animals}
@@ -86,8 +89,10 @@ export default function AnimalsScreen() {
 const s = StyleSheet.create({
   root:       { flex: 1, backgroundColor: colors.gray[50] },
   center:     { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.gray[50] },
-  header:     { paddingHorizontal: 16, paddingTop: 24, paddingBottom: 8 },
+  header:     { paddingHorizontal: 16, paddingTop: 24, paddingBottom: 8, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   heading:    { fontSize: text["2xl"], fontWeight: "700", color: colors.gray[900] },
+  addBtn:     { backgroundColor: colors.emerald[600], borderRadius: radius.md, paddingHorizontal: 14, paddingVertical: 7 },
+  addBtnText: { color: "#fff", fontSize: text.sm, fontWeight: "700" },
   list:       { padding: 12 },
   empty:      { alignItems: "center", paddingTop: 64 },
   emptyEmoji: { fontSize: 48, marginBottom: 8 },

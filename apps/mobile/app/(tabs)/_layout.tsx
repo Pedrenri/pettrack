@@ -19,6 +19,10 @@ export default function TabsLayout() {
         name="schedules"
         options={{ title: "Schedules", tabBarIcon: ({ color }) => <TabIcon emoji="📅" color={color} /> }}
       />
+      <Tabs.Screen
+        name="account"
+        options={{ title: "Account", tabBarIcon: ({ color }) => <TabIcon emoji="👤" color={color} /> }}
+      />
     </Tabs>
   );
 }
