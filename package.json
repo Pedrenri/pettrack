@@ -9,5 +9,13 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint"
+  },
+  "overrides": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "typescript": "^5"
   }
 }

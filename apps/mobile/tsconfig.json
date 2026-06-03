@@ -1,11 +1,22 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "jsx": "react",
     "strict": true,
     "paths": {
-      "@/*": ["./*"],
-      "@pettrack/core": ["../../packages/core/src/index.ts"]
+      "@/*": [
+        "./*"
+      ],
+      "@pettrack/core": [
+        "../../packages/core/src/index.ts"
+      ]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.d.ts", "expo-env.d.ts"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.d.ts",
+    "expo-env.d.ts",
+    ".expo/types/**/*.ts"
+  ]
 }

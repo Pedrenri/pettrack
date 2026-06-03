@@ -129,7 +129,7 @@ function AccountMenu({ tabMode = false }) {
                                 damping: 25,
                                 stiffness: 300
                             },
-                            className: " fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl p-6 space-y-4  md:hidden ",
+                            className: "   fixed bottom-0 left-0 right-0   bg-white dark:bg-gray-800   rounded-t-2xl   shadow-2xl   p-6   space-y-4      md:hidden   ",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "mx-auto h-1.5 w-12 rounded-full bg-gray-300 dark:bg-gray-600"
@@ -236,7 +236,7 @@ function AccountMenu({ tabMode = false }) {
                             transition: {
                                 duration: 0.15
                             },
-                            className: " absolute right-0 top-12 w-64 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg  hidden md:block ",
+                            className: "   absolute right-0 top-12   w-64   rounded-xl   border border-gray-200 dark:border-gray-700   bg-white dark:bg-gray-800   shadow-lg      hidden md:block   ",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "px-4 py-3",

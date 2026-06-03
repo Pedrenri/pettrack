@@ -1,48 +1,39 @@
 import { useEffect, useState } from "react";
 import {
   View, Text, FlatList, TouchableOpacity,
-  StyleSheet, ActivityIndicator, SafeAreaView, Alert,
+  ActivityIndicator, SafeAreaView, Alert, StyleSheet,
 } from "react-native";
 import { supabase } from "@/lib/supabase";
 import {
   type ScheduleItem, type Animal,
-  dueStatus, dueSummary, scheduleFrequencyLabel, isAppointment,
+  dueStatus, dueSummary, scheduleFrequencyLabel, SCHEDULE_TYPE_CONFIG,
 } from "@pettrack/core";
-
-const STATUS_COLOR: Record<string, string> = {
-  overdue: "#ef4444",
-  today:   "#f59e0b",
-  soon:    "#eab308",
-  ok:      "#10b981",
-  done:    "#9ca3af",
-};
+import { colors, radius, shadow, text, statusColors, scheduleTypeColors } from "@/lib/theme";
+import React from "react";
 
 export default function SchedulesScreen() {
   const [schedules, setSchedules] = useState<ScheduleItem[]>([]);
   const [animals, setAnimals] = useState<Record<string, Animal>>({});
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    Promise.all([
-      supabase
-        .from("animal_schedules")
-        .select("id, animal_id, name, type, interval_days, weekdays, due_date, due_time, last_done, notes"),
-      supabase
-        .from("animals")
-        .select("id, name, animal_photos(url)"),
-    ]).then(([{ data: s }, { data: a }]) => {
-      setSchedules((s as ScheduleItem[]) ?? []);
-      const map: Record<string, Animal> = {};
-      (a as Animal[] ?? []).forEach((animal) => (map[animal.id] = animal));
-      setAnimals(map);
-      setLoading(false);
-    });
-  }, []);
+  useEffect(() => { load(); }, []);
+
+  async function load() {
+    const [{ data: s }, { data: a }] = await Promise.all([
+      supabase.from("animal_schedules").select("id, animal_id, name, type, interval_days, weekdays, due_date, due_time, last_done, notes"),
+      supabase.from("animals").select("id, name"),
+    ]);
+    setSchedules((s as ScheduleItem[]) ?? []);
+    const map: Record<string, Animal> = {};
+    ((a as Animal[]) ?? []).forEach((an) => (map[an.id] = an));
+    setAnimals(map);
+    setLoading(false);
+  }
 
   async function markDone(item: ScheduleItem) {
     const date = new Date().toISOString().split("T")[0];
     await supabase.from("animal_schedules").update({ last_done: date }).eq("id", item.id);
-    setSchedules((p) => p.map((s) => (s.id === item.id ? { ...s, last_done: date } : s)));
+    setSchedules((p) => p.map((s) => s.id === item.id ? { ...s, last_done: date } : s));
   }
 
   const sorted = [...schedules].sort((a, b) => {
@@ -50,53 +41,91 @@ export default function SchedulesScreen() {
     return (order[dueStatus(a)] ?? 4) - (order[dueStatus(b)] ?? 4);
   });
 
+  const needsAttention = sorted.filter(s => !["ok", "done"].includes(dueStatus(s))).length;
+
   if (loading) {
     return (
-      <SafeAreaView style={styles.center}>
-        <ActivityIndicator color="#10b981" />
+      <SafeAreaView style={s.center}>
+        <ActivityIndicator color={colors.emerald[600]} size="large" />
       </SafeAreaView>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.heading}>Schedules</Text>
+    <SafeAreaView style={s.root}>
+      <View style={s.header}>
+        <Text style={s.heading}>Schedules</Text>
+        {needsAttention > 0 && (
+          <Text style={s.subheading}>{needsAttention} need attention</Text>
+        )}
+      </View>
+
       <FlatList
         data={sorted}
         keyExtractor={(s) => s.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={s.list}
+        ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
+        ListEmptyComponent={() => (
+          <View style={s.empty}>
+            <Text style={s.emptyEmoji}>📅</Text>
+            <Text style={s.emptyText}>No schedules yet</Text>
+          </View>
+        )}
         renderItem={({ item }) => {
           const status = dueStatus(item);
+          const sc = statusColors[status];
+          const cfg = SCHEDULE_TYPE_CONFIG[item.type];
+          const tc = scheduleTypeColors[item.type] ?? scheduleTypeColors.custom;
           const animal = animals[item.animal_id];
+
           return (
-            <View style={styles.card}>
-              <View style={[styles.dot, { backgroundColor: STATUS_COLOR[status] }]} />
-              <View style={styles.cardBody}>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.meta}>
-                  {animal?.name} · {scheduleFrequencyLabel(item)}
-                </Text>
-                <Text style={[styles.status, { color: STATUS_COLOR[status] }]}>
-                  {dueSummary(item)}
-                </Text>
+            <View style={s.card}>
+              {/* Left: status bar */}
+              <View style={[s.statusBar, { backgroundColor: sc.dot }]} />
+
+              <View style={s.cardInner}>
+                {/* Top row: icon badge + name + done button */}
+                <View style={s.row}>
+                  <View style={[s.typeBadge, { backgroundColor: tc.bg, borderColor: tc.border }]}>
+                    <Text style={s.typeIcon}>{cfg?.icon ?? "📅"}</Text>
+                    <Text style={[s.typeLabel, { color: tc.text }]}>{cfg?.label ?? item.type}</Text>
+                  </View>
+                  <View style={{ flex: 1 }} />
+                  {status !== "done" && (
+                    <TouchableOpacity
+                      style={s.doneBtn}
+                      onPress={() =>
+                        Alert.alert(
+                          `Mark "${item.name}" done?`,
+                          `This will record today (${new Date().toLocaleDateString("en-GB")}) as the completion date.`,
+                          [
+                            { text: "Cancel", style: "cancel" },
+                            { text: "✓ Done", onPress: () => markDone(item) },
+                          ],
+                        )
+                      }
+                    >
+                      <Text style={s.doneBtnText}>✓ Done</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+
+                {/* Schedule name */}
+                <Text style={s.name} numberOfLines={1}>{item.name}</Text>
+
+                {/* Meta */}
+                <View style={s.row}>
+                  <Text style={s.meta} numberOfLines={1}>
+                    {animal?.name ?? "—"}{"  ·  "}{scheduleFrequencyLabel(item)}
+                  </Text>
+                </View>
+
+                {/* Status chip */}
+                <View style={[s.statusChip, { backgroundColor: sc.bg }]}>
+                  <View style={[s.statusDot, { backgroundColor: sc.dot }]} />
+                  <Text style={[s.statusText, { color: sc.text }]}>{dueSummary(item)}</Text>
+                </View>
               </View>
-              {status !== "done" && (
-                <TouchableOpacity
-                  style={styles.doneBtn}
-                  onPress={() =>
-                    Alert.alert(
-                      `Mark "${item.name}" done?`,
-                      `Date: ${new Date().toLocaleDateString("en-GB")}`,
-                      [
-                        { text: "Cancel", style: "cancel" },
-                        { text: "Done", onPress: () => markDone(item) },
-                      ],
-                    )
-                  }
-                >
-                  <Text style={styles.doneBtnText}>✓</Text>
-                </TouchableOpacity>
-              )}
             </View>
           );
         }}
@@ -105,24 +134,54 @@ export default function SchedulesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9fafb" },
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  heading: { fontSize: 22, fontWeight: "700", color: "#111827", padding: 16, paddingBottom: 8 },
-  list: { padding: 16, gap: 10 },
+const s = StyleSheet.create({
+  root:   { flex: 1, backgroundColor: colors.gray[50] },
+  center: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.gray[50] },
+  header: { paddingHorizontal: 16, paddingTop: 24, paddingBottom: 8, flexDirection: "row", alignItems: "baseline", gap: 8 },
+  heading:    { fontSize: text["2xl"], fontWeight: "700", color: colors.gray[900] },
+  subheading: { fontSize: text.sm, color: colors.gray[400] },
+  list:   { padding: 16 },
+  empty:  { alignItems: "center", paddingTop: 64 },
+  emptyEmoji: { fontSize: 48, marginBottom: 8 },
+  emptyText:  { fontSize: text.sm, color: colors.gray[400] },
+
   card: {
-    flexDirection: "row", alignItems: "center", gap: 12,
-    backgroundColor: "#fff", borderRadius: 16, padding: 14,
-    shadowColor: "#000", shadowOpacity: 0.04, shadowRadius: 6, elevation: 2,
+    backgroundColor: colors.white,
+    borderRadius: radius.lg,
+    borderWidth: 1,
+    borderColor: colors.gray[100],
+    flexDirection: "row",
+    overflow: "hidden",
+    ...shadow.sm,
   },
-  dot: { width: 10, height: 10, borderRadius: 5, flexShrink: 0 },
-  cardBody: { flex: 1 },
-  name: { fontSize: 15, fontWeight: "600", color: "#111827" },
-  meta: { fontSize: 12, color: "#6b7280", marginTop: 1 },
-  status: { fontSize: 12, fontWeight: "600", marginTop: 3 },
+  statusBar:  { width: 4 },
+  cardInner:  { flex: 1, padding: 14, gap: 6 },
+  row:        { flexDirection: "row", alignItems: "center", gap: 8 },
+
+  typeBadge: {
+    flexDirection: "row", alignItems: "center", gap: 4,
+    paddingHorizontal: 8, paddingVertical: 3,
+    borderRadius: radius.full, borderWidth: 1,
+  },
+  typeIcon:  { fontSize: 12 },
+  typeLabel: { fontSize: text.xs, fontWeight: "600" },
+
+  name: { fontSize: text.base, fontWeight: "600", color: colors.gray[900] },
+  meta: { fontSize: text.sm, color: colors.gray[400], flex: 1 },
+
+  statusChip: {
+    flexDirection: "row", alignItems: "center", gap: 5,
+    alignSelf: "flex-start",
+    paddingHorizontal: 8, paddingVertical: 3,
+    borderRadius: radius.full,
+  },
+  statusDot:  { width: 6, height: 6, borderRadius: 3 },
+  statusText: { fontSize: text.xs, fontWeight: "600" },
+
   doneBtn: {
-    backgroundColor: "#10b981", borderRadius: 10,
+    backgroundColor: colors.emerald[600],
+    borderRadius: radius.md,
     paddingHorizontal: 12, paddingVertical: 6,
   },
-  doneBtnText: { color: "#fff", fontWeight: "700", fontSize: 14 },
+  doneBtnText: { color: colors.white, fontSize: text.sm, fontWeight: "700" },
 });
