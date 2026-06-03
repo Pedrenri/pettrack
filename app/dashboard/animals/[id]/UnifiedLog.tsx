@@ -26,7 +26,7 @@ export const TYPE_CONFIG: Record<LogType, { label: string; icon: string; badge: 
   custom:   { label: "Custom",   icon: "✏️", badge: "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600" },
 };
 
-const LOG_TYPES: LogType[] = ["feeding", "weight", "medical", "shed", "handling", "custom"];
+export const LOG_TYPES: LogType[] = ["feeding", "weight", "medical", "shed", "handling", "custom"];
 
 const inputCls =
   "w-full rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none focus:border-emerald-400 focus:bg-white dark:focus:bg-gray-700 focus:ring-2 focus:ring-emerald-100 transition";
@@ -112,6 +112,32 @@ export default function UnifiedLog({ animalId, onWeightChange }: { animalId: str
     setEntries(p => p.filter(e => e.id !== id));
     setDeleting(null);
     if (entry?.type === "weight") onWeightChange?.();
+  }
+
+  async function saveEdit(id: string, editForm: { logged_at: string; type: LogType; title: string; value: string; unit: string; notes: string }) {
+    await supabase.from("animal_log").update({
+      logged_at: editForm.logged_at,
+      type: editForm.type,
+      title: editForm.title || null,
+      value: editForm.value ? parseFloat(editForm.value) : null,
+      unit: editForm.unit || null,
+      notes: editForm.notes || null,
+    }).eq("id", id);
+
+    const updates: Record<string, string | number> = {};
+    if (editForm.type === "weight" && editForm.value) {
+      updates.weight = parseFloat(editForm.value);
+      updates.last_weighed = editForm.logged_at;
+    }
+    if (editForm.type === "feeding")  updates.last_fed     = editForm.logged_at;
+    if (editForm.type === "shed")     updates.last_shed    = editForm.logged_at;
+    if (editForm.type === "handling") updates.last_handled = editForm.logged_at;
+    if (Object.keys(updates).length > 0) {
+      await supabase.from("animals").update(updates).eq("id", animalId);
+    }
+
+    await fetchEntries();
+    if (editForm.type === "weight") onWeightChange?.();
   }
 
   return (
@@ -261,6 +287,7 @@ export default function UnifiedLog({ animalId, onWeightChange }: { animalId: str
                 <LogEntryCard
                   entry={e}
                   onDelete={deleting !== e.id ? remove : undefined}
+                  onSave={saveEdit}
                 />
               </motion.div>
             ))}
@@ -271,6 +298,7 @@ export default function UnifiedLog({ animalId, onWeightChange }: { animalId: str
       {!loading && entries.length === 0 && !showForm && (
         <p className="text-xs text-gray-400 dark:text-gray-500 text-center py-2">No log entries yet</p>
       )}
+
     </div>
   );
 }
