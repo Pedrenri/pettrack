@@ -26,7 +26,7 @@ export default function DashboardNav() {
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 text-gray-800 dark:text-gray-100 font-semibold">
             <Image src="/assets/img/logo.png" alt="Logo" width={28} height={28} />
-            <span>PetTrack</span>
+            <span>ReptLog</span>
           </Link>
 
           {/* Tab pills */}

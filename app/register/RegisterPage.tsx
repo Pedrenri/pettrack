@@ -54,8 +54,8 @@ export default function RegisterPage() {
       >
         <div className="flex justify-center mb-8">
           <Link href="/" className="flex items-center gap-2.5">
-            <Image src="/assets/img/logo.png" alt="PetTrack" width={36} height={36} />
-            <span className="text-lg font-semibold text-white">PetTrack</span>
+            <Image src="/assets/img/logo.png" alt="ReptLog" width={36} height={36} />
+            <span className="text-lg font-semibold text-white">ReptLog</span>
           </Link>
         </div>
 

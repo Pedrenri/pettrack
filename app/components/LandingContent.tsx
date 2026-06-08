@@ -54,8 +54,8 @@ export default function LandingContent({ heroImage }: { heroImage: any }) {
           className="relative flex items-center justify-between px-5 py-5 max-w-6xl mx-auto w-full md:px-10"
         >
           <div className="flex items-center gap-2.5">
-            <Image src="/assets/img/logo.png" alt="PetTrack" width={30} height={30} />
-            <span className="font-semibold text-white">PetTrack</span>
+            <Image src="/assets/img/logo.png" alt="ReptLog" width={30} height={30} />
+            <span className="font-semibold text-white">ReptLog</span>
           </div>
           <Link
             href="/login"
@@ -181,7 +181,7 @@ export default function LandingContent({ heroImage }: { heroImage: any }) {
 
       {/* ── FOOTER ── */}
       <footer className="border-t border-gray-200 py-6 text-center text-xs text-gray-400">
-        © {new Date().getFullYear()} PetTrack. All rights reserved.
+        © {new Date().getFullYear()} ReptLog. All rights reserved.
       </footer>
     </div>
   );

@@ -46,7 +46,7 @@ export default function DashboardShell({
                 className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-emerald-200"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                PetTrack
+                ReptLog
               </motion.div>
 
               <motion.h1
