@@ -25,7 +25,7 @@ export default function DashboardNav() {
       <header className="hidden md:flex items-center justify-between px-8 py-3 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2 text-gray-800 dark:text-gray-100 font-semibold">
-            <Image src="/assets/img/logo.png" alt="Logo" width={28} height={28} />
+            <Image src="/assets/img/icon.png" alt="Logo" width={28} height={28} />
             <span>ReptLog</span>
           </Link>
 

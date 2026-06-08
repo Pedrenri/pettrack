@@ -50,7 +50,7 @@ export default function VerifyEmailContent() {
       >
         <div className="flex justify-center mb-8">
           <Link href="/" className="flex items-center gap-2.5">
-            <Image src="/assets/img/logo.png" alt="ReptLog" width={36} height={36} />
+            <Image src="/assets/img/icon.png" alt="ReptLog" width={36} height={36} />
             <span className="text-lg font-semibold text-white">ReptLog</span>
           </Link>
         </div>

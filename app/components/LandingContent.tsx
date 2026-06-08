@@ -54,7 +54,7 @@ export default function LandingContent({ heroImage }: { heroImage: any }) {
           className="relative flex items-center justify-between px-5 py-5 max-w-6xl mx-auto w-full md:px-10"
         >
           <div className="flex items-center gap-2.5">
-            <Image src="/assets/img/logo.png" alt="ReptLog" width={30} height={30} />
+            <Image src="/assets/img/icon.png" alt="ReptLog" width={30} height={30} />
             <span className="font-semibold text-white">ReptLog</span>
           </div>
           <Link
