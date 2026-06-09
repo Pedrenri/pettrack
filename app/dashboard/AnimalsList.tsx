@@ -9,10 +9,15 @@ export default async function AnimalsList() {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { data: animals, error } = await supabase
-    .from("animals")
-    .select("id, chip_id, name, species_name, breed, birthday, animal_photos ( url )")
-    .order("created_at", { ascending: true });
+  const [{ data: animals, error }, { data: schedules }] = await Promise.all([
+    supabase
+      .from("animals")
+      .select("id, chip_id, name, species_name, breed, birthday, animal_photos ( url )")
+      .order("created_at", { ascending: true }),
+    supabase
+      .from("animal_schedules")
+      .select("id, animal_id, name, type, interval_days, weekdays, due_date, due_time, last_done"),
+  ]);
 
   if (error) {
     return (
@@ -22,5 +27,5 @@ export default async function AnimalsList() {
     );
   }
 
-  return <AnimalsGrid animals={animals ?? []} />;
+  return <AnimalsGrid animals={animals ?? []} schedules={(schedules ?? []) as any} />;
 }

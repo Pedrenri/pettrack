@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { calcAge } from "@/utils/age";
+import { type ScheduleItem, TYPE_CONFIG, dueStatus } from "@/app/dashboard/animals/[id]/ScheduleManager";
 
 interface Animal {
   id: string;
@@ -14,8 +15,10 @@ interface Animal {
   animal_photos: Array<{ url: string }>;
 }
 
-export default function AnimalCard({ animal, index }: { animal: Animal; index: number }) {
+export default function AnimalCard({ animal, index, dueToday = [] }: { animal: Animal; index: number; dueToday?: ScheduleItem[] }) {
   const photo = animal.animal_photos?.[0]?.url;
+  const shown = dueToday.slice(0, 2);
+  const extra = dueToday.length - shown.length;
 
   return (
     <motion.div
@@ -40,10 +43,31 @@ export default function AnimalCard({ animal, index }: { animal: Animal; index: n
                 🦎
               </div>
             )}
+
             {/* Chip badge */}
             {animal.chip_id && (
               <div className="absolute bottom-2 left-2 rounded-full bg-black/50 backdrop-blur-sm px-2 py-0.5 text-xs text-white/90 font-medium">
                 # {animal.chip_id}
+              </div>
+            )}
+
+            {/* Due today badges */}
+            {dueToday.length > 0 && (
+              <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+                {shown.map(s => {
+                  const over = dueStatus(s) === "overdue";
+                  return (
+                    <div key={s.id} className={`flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs font-semibold backdrop-blur-sm shadow-sm ${over ? "bg-black/55 border border-red-400/60" : "bg-black/55 border border-amber-400/60"} text-white`}>
+                      <span>{TYPE_CONFIG[s.type]?.icon}</span>
+                      <span>{over ? "Overdue" : "Today"}</span>
+                    </div>
+                  );
+                })}
+                {extra > 0 && (
+                  <div className="rounded-md bg-black/40 backdrop-blur-sm px-1.5 py-0.5 text-xs text-white font-medium shadow-sm">
+                    +{extra}
+                  </div>
+                )}
               </div>
             )}
           </div>

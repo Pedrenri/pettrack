@@ -99,7 +99,7 @@ const pillBase = "flex-1 rounded-xl border py-2 text-xs font-semibold transition
 const pillActive = "border-emerald-400 bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300";
 const pillInactive = "border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400";
 
-type FormState = {
+export type FormState = {
   name: string;
   type: ScheduleType;
   mode: "recurring" | "appointment";
@@ -111,12 +111,12 @@ type FormState = {
   notes: string;
 };
 
-const defaultForm: FormState = {
+export const defaultForm: FormState = {
   name: "", type: "feeding", mode: "recurring", recurMode: "interval",
   interval_days: "7", weekdays: [], due_date: "", due_time: "", notes: "",
 };
 
-function itemToForm(item: ScheduleItem): FormState {
+export function itemToForm(item: ScheduleItem): FormState {
   return {
     name: item.name,
     type: item.type,
@@ -134,6 +134,10 @@ type DoneModalState =
   | null
   | { step: "confirm"; item: ScheduleItem; date: string }
   | { step: "log";     item: ScheduleItem; date: string };
+
+export function canSave(form: FormState): boolean {
+  return !!(form.name && (form.mode === "appointment" ? !!form.due_date : form.recurMode === "interval" ? !!form.interval_days : form.weekdays.length > 0));
+}
 
 export default function ScheduleManager({ animalId }: { animalId: string }) {
   const supabase = createClient();
@@ -166,7 +170,18 @@ export default function ScheduleManager({ animalId }: { animalId: string }) {
     setLoading(false);
   }
 
-  useEffect(() => { fetchItems(); }, [animalId]);
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      const { data } = await supabase
+        .from("animal_schedules")
+        .select("id, animal_id, name, type, interval_days, weekdays, due_date, due_time, last_done, notes")
+        .eq("animal_id", animalId)
+        .order("created_at", { ascending: true });
+      if (active) { setItems((data as ScheduleItem[]) ?? []); setLoading(false); }
+    })();
+    return () => { active = false; };
+  }, [animalId]);
 
   function setFormType(form: FormState, type: ScheduleType): FormState {
     return { ...form, type, mode: TYPE_CONFIG[type].defaultAppointment ? "appointment" : form.mode === "appointment" ? "recurring" : form.mode };
@@ -174,10 +189,6 @@ export default function ScheduleManager({ animalId }: { animalId: string }) {
 
   function toggleWeekday(form: FormState, d: number): FormState {
     return { ...form, weekdays: form.weekdays.includes(d) ? form.weekdays.filter(x => x !== d) : [...form.weekdays, d] };
-  }
-
-  function canSave(form: FormState) {
-    return form.name && (form.mode === "appointment" ? !!form.due_date : form.recurMode === "interval" ? !!form.interval_days : form.weekdays.length > 0);
   }
 
   async function addItem() {
@@ -429,7 +440,7 @@ export default function ScheduleManager({ animalId }: { animalId: string }) {
               {/* Step 1: Confirm date */}
               {doneModal.step === "confirm" && (
                 <div className="p-5 space-y-4">
-                  <p className="font-semibold text-gray-900 dark:text-white">Mark "{doneModal.item.name}" done</p>
+                  <p className="font-semibold text-gray-900 dark:text-white">Mark &quot;{doneModal.item.name}&quot; done</p>
                   <div>
                     <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Date completed <span className="text-red-400">*</span></p>
                     <input type="date" value={doneModal.date}
@@ -662,7 +673,7 @@ function TimeInput({ value, onChange }: { value: string; onChange: (v: string) =
 
 // ── Shared form UI ────────────────────────────────────────────────────────────
 
-function ScheduleForm({
+export function ScheduleForm({
   form, onChange, setType, toggleDay,
 }: {
   form: FormState;
@@ -781,7 +792,7 @@ function MarkDoneButton({ item, onDone }: { item: ScheduleItem; onDone: (date: s
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
               onClick={e => e.stopPropagation()}
               className="w-full max-w-xs rounded-2xl bg-white dark:bg-gray-800 p-5 shadow-xl mx-4 space-y-4">
-              <p className="font-semibold text-gray-900 dark:text-white">Mark "{item.name}" done</p>
+              <p className="font-semibold text-gray-900 dark:text-white">Mark &quot;{item.name}&quot; done</p>
               <div>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mb-1">Date completed <span className="text-red-400">*</span></p>
                 <input type="date" value={date} onChange={e => setDate(e.target.value)}

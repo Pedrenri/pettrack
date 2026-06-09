@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import AnimalCard from "./AnimalCard";
 import Link from "next/link";
+import { dueStatus, type ScheduleItem } from "@/app/dashboard/animals/[id]/ScheduleManager";
 
 interface Animal {
   id: string;
@@ -15,11 +16,22 @@ interface Animal {
   animal_photos: Array<{ url: string }>;
 }
 
-export default function AnimalsGrid({ animals }: { animals: Animal[] }) {
+export default function AnimalsGrid({ animals, schedules = [] }: { animals: Animal[]; schedules?: ScheduleItem[] }) {
   const [query, setQuery] = useState("");
   const [activeSpecies, setActiveSpecies] = useState<string | null>(null);
 
-  // Unique species for filter chips
+  const dueTodayMap = useMemo(() => {
+    const map: Record<string, ScheduleItem[]> = {};
+    for (const s of schedules) {
+      const status = dueStatus(s);
+      if (status === "today" || status === "overdue") {
+        if (!map[s.animal_id]) map[s.animal_id] = [];
+        map[s.animal_id].push(s);
+      }
+    }
+    return map;
+  }, [schedules]);
+
   const speciesList = useMemo(() => {
     const set = new Set(animals.map((a) => a.species_name));
     return Array.from(set).sort();
@@ -56,9 +68,7 @@ export default function AnimalsGrid({ animals }: { animals: Animal[] }) {
 
   return (
     <div className="space-y-4">
-      {/* Search + filters */}
       <div className="space-y-3">
-        {/* Search */}
         <div className="relative">
           <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" />
@@ -80,16 +90,11 @@ export default function AnimalsGrid({ animals }: { animals: Animal[] }) {
           )}
         </div>
 
-        {/* Species chips — only show if >1 species */}
         {speciesList.length > 1 && (
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => setActiveSpecies(null)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                !activeSpecies
-                  ? "bg-gray-900 text-white"
-                  : "bg-white border border-gray-200 text-gray-500 hover:border-gray-300"
-              }`}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition ${!activeSpecies ? "bg-gray-900 text-white" : "bg-white border border-gray-200 text-gray-500 hover:border-gray-300"}`}
             >
               All
             </button>
@@ -97,11 +102,7 @@ export default function AnimalsGrid({ animals }: { animals: Animal[] }) {
               <button
                 key={sp}
                 onClick={() => setActiveSpecies(sp === activeSpecies ? null : sp)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                  activeSpecies === sp
-                    ? "bg-emerald-600 text-white"
-                    : "bg-white border border-gray-200 text-gray-500 hover:border-gray-300"
-                }`}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition ${activeSpecies === sp ? "bg-emerald-600 text-white" : "bg-white border border-gray-200 text-gray-500 hover:border-gray-300"}`}
               >
                 {sp}
               </button>
@@ -110,20 +111,15 @@ export default function AnimalsGrid({ animals }: { animals: Animal[] }) {
         )}
       </div>
 
-      {/* Grid */}
       {filtered.length === 0 ? (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="py-16 text-center text-sm text-gray-400"
-        >
-          No animals match "{query}"
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="py-16 text-center text-sm text-gray-400">
+          No animals match &quot;{query}&quot;
         </motion.div>
       ) : (
         <motion.div layout className="grid grid-cols-2 md:grid-cols-3 gap-4">
           <AnimatePresence mode="popLayout">
             {filtered.map((animal, index) => (
-              <AnimalCard key={animal.id} animal={animal} index={index} />
+              <AnimalCard key={animal.id} animal={animal} index={index} dueToday={dueTodayMap[animal.id] ?? []} />
             ))}
           </AnimatePresence>
         </motion.div>

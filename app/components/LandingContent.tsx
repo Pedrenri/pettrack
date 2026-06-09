@@ -6,19 +6,34 @@ import Image from "next/image";
 
 const features = [
   {
-    icon: "🦎",
-    title: "Species Profiles",
-    body: "Detailed records for geckos, chameleons, monitors, snakes and more — built around how reptiles actually live.",
+    icon: "🐍",
+    title: "Animal Profiles",
+    body: "Store name, species, breed, latin name, birthday, microchip ID, gender, and photos for every animal in your collection.",
   },
   {
-    icon: "🌡️",
-    title: "Care Tracking",
-    body: "Log feeding, shedding, handling and weigh-ins. Never lose track of your animal's care history.",
+    icon: "📋",
+    title: "Activity Log",
+    body: "Log feedings, weight checks, medical events, sheds, and handling sessions — with full editable history.",
+  },
+  {
+    icon: "📈",
+    title: "Weight Tracking",
+    body: "Record weight over time and visualize growth with a built-in chart. Spot trends and catch issues early.",
+  },
+  {
+    icon: "📅",
+    title: "Care Schedules",
+    body: "Set recurring reminders or one-off appointments for feeding, medications, vet visits and more. See what's due today at a glance.",
   },
   {
     icon: "🔲",
     title: "QR Identity Tags",
-    body: "Generate a scannable QR code for each animal. Perfect for enclosure labels or physical ID tags.",
+    body: "Generate a scannable QR code for each animal linking to their profile. Perfect for enclosure labels.",
+  },
+  {
+    icon: "🌐",
+    title: "Shareable Profiles",
+    body: "Every animal gets a public page with photos, care log, and weight chart — share it with your vet or fellow keepers.",
   },
 ];
 
@@ -159,7 +174,7 @@ export default function LandingContent({ heroImage }: { heroImage: any }) {
             </p>
           </motion.div>
 
-          <div className="grid gap-4 md:gap-6 md:grid-cols-3">
+          <div className="grid gap-4 md:gap-6 sm:grid-cols-2 md:grid-cols-3">
             {features.map((f, i) => (
               <motion.div
                 key={i}
