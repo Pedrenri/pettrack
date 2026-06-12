@@ -182,7 +182,6 @@ export default function LandingContent({ heroImage }: { heroImage: any }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
-                whileHover={{ y: -3, transition: { duration: 0.2 } }}
                 className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm cursor-default"
               >
                 <span className="text-2xl">{f.icon}</span>

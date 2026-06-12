@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Confirm your email • ReptLog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #0f1a14;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial,
+          sans-serif;
+      }
+      .container {
+        max-width: 480px;
+        margin: 40px auto;
+        background: linear-gradient(145deg, #1a2e22, #111a15);
+        border: 1px solid #1e3a28;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        padding: 32px 28px;
+      }
+      .logo {
+        text-align: center;
+        font-size: 24px;
+        font-weight: 700;
+        color: #34d399;
+        margin-bottom: 4px;
+        letter-spacing: 0.5px;
+      }
+      .logo img {
+        display: inline-block;
+        vertical-align: middle;
+        width: 28px;
+        height: 28px;
+        margin-right: 8px;
+        margin-top: -3px;
+      }
+      .subtitle {
+        text-align: center;
+        font-size: 13px;
+        color: #6b7280;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .content {
+        font-size: 15px;
+        color: #9ca3af;
+        line-height: 1.6;
+        text-align: center;
+      }
+      .otp-box {
+        margin: 24px auto;
+        padding: 20px 0;
+        background: linear-gradient(135deg, #052e16, #064e35);
+        border: 1px solid #065f46;
+        border-radius: 12px;
+        text-align: center;
+      }
+      .otp-code {
+        font-size: 34px;
+        letter-spacing: 10px;
+        font-weight: 700;
+        color: #6ee7b7;
+        font-variant-numeric: tabular-nums;
+      }
+      .hint {
+        margin-top: 16px;
+        font-size: 13px;
+        color: #4b5563;
+        text-align: center;
+        line-height: 1.7;
+      }
+      .divider {
+        margin: 24px 0;
+        border: none;
+        border-top: 1px solid #1e3a28;
+      }
+      .footer {
+        margin-top: 0;
+        font-size: 12px;
+        color: #4b5563;
+        text-align: center;
+      }
+      .footer strong {
+        color: #34d399;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">🦎 ReptLog</div>
+      <div class="subtitle">Email confirmation</div>
+      <div class="content">
+        Use the code below to confirm your email and access your account:
+      </div>
+      <div class="otp-box">
+        <div class="otp-code">{{ .Token }}</div>
+      </div>
+      <div class="hint">
+        This code expires in a few minutes.<br />
+        If you didn't request this, you can safely ignore this email.
+      </div>
+      <hr class="divider" />
+      <div class="footer">
+        Thank you for keeping track of your reptiles with <strong>ReptLog</strong> 🐍
+      </div>
+    </div>
+  </body>
+</html>

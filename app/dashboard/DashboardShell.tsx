@@ -13,7 +13,7 @@ export default function DashboardShell({
   count?: number;
 }) {
   return (
-    <div className="min-h-screen bg-[#f7f8fa] dark:bg-gray-950">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 dark:from-gray-950 to-gray-500/10 dark:to-gray-800">
 
       {/* ── HERO HEADER ── */}
       <motion.div

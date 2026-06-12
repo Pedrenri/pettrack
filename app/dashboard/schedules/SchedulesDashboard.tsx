@@ -281,9 +281,10 @@ export default function SchedulesDashboard({
           <motion.div key={item.id} layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
             className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden">
 
-            <button type="button"
+            <div role="button" tabIndex={0}
               onClick={() => { if (editing) return; setExpandedId(expanded ? null : item.id); if (expanded) setEditingId(null); }}
-              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); if (editing) return; setExpandedId(expanded ? null : item.id); if (expanded) setEditingId(null); } }}
+              className="w-full flex items-center gap-3 px-4 py-3 text-left cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
               <Link href={`/dashboard/animals/${animal.id}`} className="flex-shrink-0" onClick={e => e.stopPropagation()}>
                 {photo
                   ? <img src={photo} className="h-9 w-9 rounded-full object-cover border border-gray-100 dark:border-gray-700" />
@@ -317,7 +318,7 @@ export default function SchedulesDashboard({
                 )}
                 <span className={`text-gray-300 dark:text-gray-600 text-xs transition-transform ${expanded ? "rotate-180" : ""}`}>▼</span>
               </div>
-            </button>
+            </div>
 
             <AnimatePresence>
               {expanded && (

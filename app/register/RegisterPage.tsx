@@ -10,17 +10,35 @@ import { motion } from "motion/react";
 const inputCls =
   "w-full rounded-xl border border-transparent bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:border-emerald-300 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900";
 
+function PasswordRequirement({ met, label }: { met: boolean; label: string }) {
+  return (
+    <div className={`flex items-center gap-1.5 text-xs transition-colors ${met ? "text-emerald-500 dark:text-emerald-400" : "text-gray-400 dark:text-gray-500"}`}>
+      <span className="text-base leading-none">{met ? "✓" : "·"}</span>
+      {label}
+    </div>
+  );
+}
+
 export default function RegisterPage() {
   const supabase = createClient();
   const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const reqs = {
+    length: password.length >= 8,
+    letter: /[a-zA-Z]/.test(password),
+    number: /[0-9]/.test(password),
+  };
+  const passwordValid = Object.values(reqs).every(Boolean);
+
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault();
+    if (!passwordValid) return;
     setErrorMsg("");
     setLoading(true);
 
@@ -90,14 +108,30 @@ export default function RegisterPage() {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500 mb-1.5">Password <span className="text-red-400">*</span></label>
-              <input
-                type="password"
-                placeholder="••••••••"
-                className={inputCls}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  className={`${inputCls} pr-11`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(p => !p)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition text-sm select-none"
+                  tabIndex={-1}
+                >
+                  {showPassword ? "Hide" : "Show"}
+                </button>
+              </div>
+
+              <div className="mt-2.5 flex flex-col gap-1 pl-0.5">
+                <PasswordRequirement met={reqs.length} label="At least 8 characters" />
+                <PasswordRequirement met={reqs.letter} label="Contains a letter" />
+                <PasswordRequirement met={reqs.number} label="Contains a number" />
+              </div>
             </div>
 
             {errorMsg && (
@@ -108,8 +142,8 @@ export default function RegisterPage() {
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               type="submit"
-              disabled={loading}
-              className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition disabled:opacity-60 mt-2"
+              disabled={loading || !passwordValid}
+              className="w-full rounded-xl bg-emerald-600 py-3 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700 transition disabled:opacity-50 mt-2"
             >
               {loading ? "Creating account…" : "Create account"}
             </motion.button>

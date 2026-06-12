@@ -8,7 +8,7 @@ import Image from "next/image";
 import { motion } from "motion/react";
 
 const inputCls =
-  "w-full rounded-xl border border-transparent bg-gray-50 px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none transition focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100 text-center tracking-widest text-base";
+  "w-full rounded-xl border border-transparent bg-gray-50 dark:bg-gray-700 px-4 py-3 text-sm text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 outline-none transition focus:border-emerald-300 focus:bg-white dark:focus:bg-gray-600 focus:ring-2 focus:ring-emerald-100 dark:focus:ring-emerald-900 text-center tracking-widest text-base";
 
 export default function VerifyEmailContent() {
   const supabase = createClient();
@@ -55,12 +55,17 @@ export default function VerifyEmailContent() {
           </Link>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-2xl shadow-black/30 px-8 py-9 text-center">
-          <h1 className="text-xl font-bold text-gray-900">Check your email</h1>
-          <p className="mt-1 text-sm text-gray-400">
-            We sent a code to
+        <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl shadow-black/30 px-8 py-9 text-center">
+          <div className="flex justify-center mb-4">
+            <div className="h-14 w-14 rounded-full bg-emerald-50 dark:bg-emerald-950 flex items-center justify-center text-2xl">
+              📬
+            </div>
+          </div>
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Check your email</h1>
+          <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
+            We sent a confirmation code to
           </p>
-          <p className="text-sm font-semibold text-emerald-600 mt-0.5">{email}</p>
+          <p className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 mt-0.5">{email}</p>
 
           <form onSubmit={handleVerify} className="mt-6 space-y-4">
             <input
@@ -86,6 +91,10 @@ export default function VerifyEmailContent() {
               {loading ? "Verifying…" : "Confirm and sign in"}
             </motion.button>
           </form>
+
+          <p className="mt-5 text-xs text-gray-400 dark:text-gray-500">
+            Didn&apos;t receive it? Check your spam folder.
+          </p>
         </div>
       </motion.div>
     </div>
